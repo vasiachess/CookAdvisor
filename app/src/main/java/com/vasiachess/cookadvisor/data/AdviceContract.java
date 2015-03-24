@@ -10,7 +10,7 @@ import android.provider.BaseColumns;
  */
 public class AdviceContract {
 
-    public static final String CONTENT_AUTHORITY = "com.vasiachess.sunshine";
+    public static final String CONTENT_AUTHORITY = "com.vasiachess.cookadvisor";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
     public static final String PATH_ADVICE = "advice";
 
@@ -30,6 +30,12 @@ public class AdviceContract {
 
         public static Uri buildAdviceUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        public static Uri buildAdviceWithTitle(
+                String title) {
+
+            return CONTENT_URI.buildUpon().appendQueryParameter(COLUMN_TITLE, title).build();
         }
     }
 

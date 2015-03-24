@@ -3,6 +3,7 @@ package com.vasiachess.cookadvisor;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -34,12 +35,27 @@ public class AdviceAdapter extends CursorAdapter {
     }
 
     @Override
-    public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
-        return null;
+    public View newView(Context context, Cursor cursor, ViewGroup parent) {
+
+        View view = LayoutInflater.from(context).inflate(R.layout.list_item_advice, parent, false);
+
+        ViewHolder viewHolder = new ViewHolder(view);
+        view.setTag(viewHolder);
+
+        return view;
     }
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 
+        ViewHolder viewHolder = (ViewHolder) view.getTag();
+
+        viewHolder.iconView.setImageResource(R.drawable.timer);
+
+        String title = cursor.getString(MainFragment.COL_TITLE);
+        viewHolder.titleView.setText(title);
+
+        String timer = cursor.getString(MainFragment.COL_TIME);
+        viewHolder.timerView.setText(timer);
     }
 }

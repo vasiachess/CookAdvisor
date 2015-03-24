@@ -1,18 +1,26 @@
 package com.vasiachess.cookadvisor;
 
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
+
+import com.vasiachess.cookadvisor.data.AdviceContract;
+
+import java.util.Vector;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements MainFragment.Callback {
+
+    private final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final String PREFS_NAME = "first_start";
+    final String IS_FIRST_START = "IsFS";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +30,40 @@ public class MainActivity extends ActionBarActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new MainFragment())
                     .commit();
+        }
+
+        SharedPreferences sp = this.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        boolean isFirstStart = sp.getBoolean(IS_FIRST_START, true);
+
+        if (isFirstStart) {
+            String[] mTitle = { "Title1", "Title2", "Title3" };
+            Integer[] mTime = { 60, 120, 180 };
+            String[] mAdvice = { "Advice1", "Advice2", "Advice3" };
+            Vector<ContentValues> cVVector = new Vector<ContentValues>(mTitle.length);
+            ContentValues adviceValues = new ContentValues();
+
+            try {
+            for (int j = 0; j < mTitle.length; j++) {
+                adviceValues.put(AdviceContract.AdviceEntry.COLUMN_TITLE, mTitle[j]);
+                adviceValues.put(AdviceContract.AdviceEntry.COLUMN_TIME, mTime[j]);
+                adviceValues.put(AdviceContract.AdviceEntry.COLUMN_ADVICE, mAdvice[j]);
+
+                cVVector.add(adviceValues);
+            }
+
+            ContentValues[] cvArray = new ContentValues[cVVector.size()];
+            cVVector.toArray(cvArray);
+            int inserted = 0;
+                inserted = this.getContentResolver().bulkInsert(AdviceContract.AdviceEntry.CONTENT_URI, cvArray);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, e.getMessage(), e);
+                e.printStackTrace();
+            }
+            isFirstStart = false;
+            SharedPreferences sPref = this.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sPref.edit();
+            editor.putBoolean(IS_FIRST_START, isFirstStart);
+            editor.commit();
         }
     }
 
@@ -49,4 +91,18 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
+    @Override
+    public void onItemSelected(Uri adviceUri) {
+        Intent intent = new Intent(this, DetailActivity.class)
+                .setData(adviceUri);
+        startActivity(intent);
+    }
+
+    public String formatTime(int time) {
+
+        String seconds = String.valueOf(time % 60);
+        String minutes = String.valueOf(time / 60);
+
+        return seconds;
+    }
 }
