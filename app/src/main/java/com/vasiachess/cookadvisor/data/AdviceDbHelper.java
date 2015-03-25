@@ -22,10 +22,10 @@ public class AdviceDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         final String SQL_CREATE_ADVICE_TABLE = "CREATE TABLE " + AdviceEntry.TABLE_NAME + " (" +
+                AdviceEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 AdviceEntry.COLUMN_TITLE + " TEXT NOT NULL, " +
                 AdviceEntry.COLUMN_TIME + " INTEGER NOT NULL, " +
-                AdviceEntry.COLUMN_ADVICE + " TEXT, " +
-                " );";
+                AdviceEntry.COLUMN_ADVICE + " TEXT)";
 
         db.execSQL(SQL_CREATE_ADVICE_TABLE);
     }

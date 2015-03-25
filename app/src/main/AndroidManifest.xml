@@ -24,6 +24,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.vasiachess.cookadvisor.MainActivity" />
         </activity>
+
+        <provider
+            android:authorities="com.vasiachess.cookadvisor"
+            android:name=".data.AdviceProvider" />
+
     </application>
 
 </manifest>

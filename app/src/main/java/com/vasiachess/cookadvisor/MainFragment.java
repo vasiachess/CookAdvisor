@@ -30,11 +30,12 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     private static final int ADVICE_LOADER = 0;
 
     private static final String[] ADVICE_COLUMNS = {
-            AdviceContract.AdviceEntry.TABLE_NAME,
+            AdviceContract.AdviceEntry.TABLE_NAME + "." + AdviceContract.AdviceEntry._ID,
             AdviceContract.AdviceEntry.COLUMN_TITLE,
             AdviceContract.AdviceEntry.COLUMN_TIME,
     };
 
+    static final int COL_ID = 0;
     static final int COL_TITLE = 1;
     static final int COL_TIME  = 2;
 

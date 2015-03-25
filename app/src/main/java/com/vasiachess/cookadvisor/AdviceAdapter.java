@@ -55,7 +55,7 @@ public class AdviceAdapter extends CursorAdapter {
         String title = cursor.getString(MainFragment.COL_TITLE);
         viewHolder.titleView.setText(title);
 
-        String timer = cursor.getString(MainFragment.COL_TIME);
+        String timer = String.valueOf(cursor.getInt(MainFragment.COL_TIME));
         viewHolder.timerView.setText(timer);
     }
 }

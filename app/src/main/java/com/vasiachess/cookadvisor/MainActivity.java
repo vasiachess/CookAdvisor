@@ -25,20 +25,14 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new MainFragment())
-                    .commit();
-        }
 
         SharedPreferences sp = this.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         boolean isFirstStart = sp.getBoolean(IS_FIRST_START, true);
 
         if (isFirstStart) {
-            String[] mTitle = { "Title1", "Title2", "Title3" };
-            Integer[] mTime = { 60, 120, 180 };
-            String[] mAdvice = { "Advice1", "Advice2", "Advice3" };
+            String[] mTitle = { "Title1", "Title2", "Title3", "Title4" };
+            Integer[] mTime = { 60, 120, 180, 200 };
+            String[] mAdvice = { "Advice1", "Advice2", "Advice3", "Advice4"  };
             Vector<ContentValues> cVVector = new Vector<ContentValues>(mTitle.length);
             ContentValues adviceValues = new ContentValues();
 
@@ -47,7 +41,7 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
                 adviceValues.put(AdviceContract.AdviceEntry.COLUMN_TITLE, mTitle[j]);
                 adviceValues.put(AdviceContract.AdviceEntry.COLUMN_TIME, mTime[j]);
                 adviceValues.put(AdviceContract.AdviceEntry.COLUMN_ADVICE, mAdvice[j]);
-
+                Log.d(LOG_TAG, String.valueOf(j) + " - " + mTitle[j]);
                 cVVector.add(adviceValues);
             }
 
@@ -55,6 +49,7 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
             cVVector.toArray(cvArray);
             int inserted = 0;
                 inserted = this.getContentResolver().bulkInsert(AdviceContract.AdviceEntry.CONTENT_URI, cvArray);
+                Log.d(LOG_TAG, "inserted - " + String.valueOf(inserted) + " items");
             } catch (Exception e) {
                 Log.e(LOG_TAG, e.getMessage(), e);
                 e.printStackTrace();
@@ -64,6 +59,13 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
             SharedPreferences.Editor editor = sPref.edit();
             editor.putBoolean(IS_FIRST_START, isFirstStart);
             editor.commit();
+        }
+
+        setContentView(R.layout.activity_main);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, new MainFragment())
+                    .commit();
         }
     }
 
