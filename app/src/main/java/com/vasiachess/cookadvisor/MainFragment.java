@@ -1,6 +1,7 @@
 package com.vasiachess.cookadvisor;
 
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.vasiachess.cookadvisor.data.AdviceContract;
@@ -20,11 +22,13 @@ import com.vasiachess.cookadvisor.data.AdviceContract;
  * Created by vasiliy on 16.03.2015.
  */
 
-public class MainFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MainFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
     private AdviceAdapter mAdviceAdapter;
     public static final String LOG_TAG = MainFragment.class.getSimpleName();
     private ListView mListView;
+    private Button btnAdd;
+
     private int mPosition = ListView.INVALID_POSITION;
 
     private static final int ADVICE_LOADER = 0;
@@ -39,7 +43,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     static final int COL_TITLE = 1;
     static final int COL_TIME  = 2;
 
-
     public interface Callback {
         /**
          * DetailFragmentCallback for when an item has been selected.
@@ -51,6 +54,21 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     @Override
+    public void onClick(View v) {
+        if (v == btnAdd) {
+            onClickAdd();
+        }
+    }
+
+    private void onClickAdd() {
+
+        Intent intent = new Intent(getActivity(), EditActivity.class);
+        startActivity(intent);
+    }
+
+
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
@@ -59,7 +77,10 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
 // Get a reference to the ListView, and attach this adapter to it.
         mListView = (ListView) rootView.findViewById(R.id.listViewAdvices);
+        btnAdd = (Button) rootView.findViewById(R.id.buttonAdd);
         mListView.setAdapter(mAdviceAdapter);
+
+        btnAdd.setOnClickListener(this);
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 

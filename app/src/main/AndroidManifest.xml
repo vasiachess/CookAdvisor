@@ -12,6 +12,7 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -19,16 +20,19 @@
             android:name=".DetailActivity"
             android:label="@string/title_activity_detail"
             android:parentActivityName=".MainActivity" >
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.vasiachess.cookadvisor.MainActivity" />
         </activity>
 
         <provider
-            android:authorities="com.vasiachess.cookadvisor"
-            android:name=".data.AdviceProvider" />
+            android:name=".data.AdviceProvider"
+            android:authorities="com.vasiachess.cookadvisor" />
 
+        <activity
+            android:name=".EditActivity"
+            android:label="@string/title_activity_edit" >
+        </activity>
     </application>
 
 </manifest>

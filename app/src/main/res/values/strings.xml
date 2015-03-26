@@ -8,4 +8,16 @@
     <string name="reset_time">RESET</string>
     <string name="advice_label">Advice</string>
     <string name="no_advices">No advices</string>
+    <string name="title_activity_edit">EditActivity</string>
+    <string name="hours">HOUR</string>
+    <string name="min">MIN</string>
+    <string name="sec">SEC</string>
+    <string name="title">Title:</string>
+    <string name="save">SAVE</string>
+    <string name="defvalue">00</string>
+    <string name="hint_title">Please, insert title</string>
+    <string name="hint_advice">Please, insert your advice</string>
+    <string name="hint_data">Please, fill all fields!</string>
+    <string name="hint_time">Please, insert valid time!</string>
+    <string name="edit">Edit</string>
 </resources>

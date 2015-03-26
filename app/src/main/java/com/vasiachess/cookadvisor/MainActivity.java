@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -12,8 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.vasiachess.cookadvisor.data.AdviceContract;
-
-import java.util.Vector;
 
 
 public class MainActivity extends ActionBarActivity implements MainFragment.Callback {
@@ -33,33 +32,40 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
             String[] mTitle = { "Title1", "Title2", "Title3", "Title4" };
             Integer[] mTime = { 60, 120, 180, 200 };
             String[] mAdvice = { "Advice1", "Advice2", "Advice3", "Advice4"  };
-            Vector<ContentValues> cVVector = new Vector<ContentValues>(mTitle.length);
-            ContentValues adviceValues = new ContentValues();
 
+            ContentValues adviceValues = new ContentValues();
+//            ContentValues[] cvArray = new ContentValues[mTitle.length];
             try {
             for (int j = 0; j < mTitle.length; j++) {
                 adviceValues.put(AdviceContract.AdviceEntry.COLUMN_TITLE, mTitle[j]);
                 adviceValues.put(AdviceContract.AdviceEntry.COLUMN_TIME, mTime[j]);
                 adviceValues.put(AdviceContract.AdviceEntry.COLUMN_ADVICE, mAdvice[j]);
+                Uri ins = this.getContentResolver().insert(AdviceContract.AdviceEntry.CONTENT_URI,adviceValues);
                 Log.d(LOG_TAG, String.valueOf(j) + " - " + mTitle[j]);
-                cVVector.add(adviceValues);
             }
 
-            ContentValues[] cvArray = new ContentValues[cVVector.size()];
-            cVVector.toArray(cvArray);
-            int inserted = 0;
-                inserted = this.getContentResolver().bulkInsert(AdviceContract.AdviceEntry.CONTENT_URI, cvArray);
-                Log.d(LOG_TAG, "inserted - " + String.valueOf(inserted) + " items");
+//            int inserted = 0;
+//                inserted = this.getContentResolver().bulkInsert(AdviceContract.AdviceEntry.CONTENT_URI, cvArray);
+//                Log.d(LOG_TAG, "inserted - " + String.valueOf(inserted) + " items");
             } catch (Exception e) {
                 Log.e(LOG_TAG, e.getMessage(), e);
                 e.printStackTrace();
             }
+
             isFirstStart = false;
             SharedPreferences sPref = this.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sPref.edit();
             editor.putBoolean(IS_FIRST_START, isFirstStart);
             editor.commit();
         }
+
+    Cursor cursor = this.getContentResolver().query(AdviceContract.AdviceEntry.CONTENT_URI, null,null, null, null);
+    cursor.moveToFirst();
+    for(int i = 0; i< cursor.getCount(); i++){
+        String title = cursor.getString(MainFragment.COL_TITLE);
+        Log.d(LOG_TAG, "inserted - " + title);
+        cursor.moveToNext();
+    }
 
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
