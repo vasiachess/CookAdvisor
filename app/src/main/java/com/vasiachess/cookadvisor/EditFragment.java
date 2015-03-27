@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,8 +27,10 @@ public class EditFragment extends Fragment implements View.OnClickListener {
     private EditText etMin;
     private EditText etSec;
     private EditText etAdvice;
-    private final String LOG_TAG = MainActivity.class.getSimpleName();
+    private final String LOG_TAG = EditFragment.class.getSimpleName();
     private boolean newItem = true;
+    private String title = "";
+    private Integer time = 0;
 
 
 
@@ -51,8 +54,11 @@ public class EditFragment extends Fragment implements View.OnClickListener {
 
         Bundle arguments = getArguments();
         if (arguments != null) {
-            String title = arguments.getString("title");
-            Integer time = arguments.getInt("time");
+
+            title = arguments.getString("title");
+
+            if (!title.equals("")) {
+            time = arguments.getInt("time");
             String advice = arguments.getString("advice");
 
             etTitle.setText(title);
@@ -68,6 +74,7 @@ public class EditFragment extends Fragment implements View.OnClickListener {
             etAdvice.setText(advice);
 
             newItem = false;
+            } else {newItem = true;}
         }
 
         btnSave.setOnClickListener(this);
@@ -115,8 +122,11 @@ public class EditFragment extends Fragment implements View.OnClickListener {
 
         if (newItem) {
             Uri ins = getActivity().getContentResolver().insert(AdviceContract.AdviceEntry.CONTENT_URI, adviceValues);
+            Log.d(LOG_TAG, "inserted - " + title);
+
         } else {
-            int upd = getActivity().getContentResolver().update(AdviceContract.AdviceEntry.CONTENT_URI, adviceValues, null, null);
+            int upd = getActivity().getContentResolver().update(AdviceContract.AdviceEntry.CONTENT_URI, adviceValues, "title = ? and time = ?", new String[] { title, String.valueOf(time)});
+            Log.d(LOG_TAG, "updated - " + title);
         }
 
         Intent intent = new Intent(getActivity(), MainActivity.class);

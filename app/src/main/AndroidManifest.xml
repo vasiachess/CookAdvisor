@@ -33,6 +33,10 @@
             android:name=".EditActivity"
             android:label="@string/title_activity_edit" >
         </activity>
+
+        <service android:name=".TimerService"
+            android:exported="false"/>
+
     </application>
 
 </manifest>

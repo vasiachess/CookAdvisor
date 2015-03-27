@@ -47,8 +47,8 @@
                 android:text="@string/hours"
                 android:layout_centerHorizontal="true"
                 android:id="@+id/textViewHH"
-                android:gravity="center_horizontal"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:gravity="center_horizontal" />
 
             <EditText
                 android:layout_width="wrap_content"
@@ -63,7 +63,7 @@
                 android:maxLength="2"
                 android:selectAllOnFocus="true"
                 android:textStyle="bold"
-                android:paddingLeft="10dp" />
+                android:gravity="center_horizontal" />
         </LinearLayout>
 
         <LinearLayout
@@ -77,8 +77,8 @@
                 android:text="@string/min"
                 android:layout_centerHorizontal="true"
                 android:id="@+id/textViewMin"
-                android:gravity="center_horizontal"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:gravity="center_horizontal" />
 
             <EditText
                 android:layout_width="wrap_content"
@@ -95,7 +95,7 @@
                 android:numeric="integer"
                 android:selectAllOnFocus="true"
                 android:textStyle="bold"
-                android:paddingLeft="15dp" />
+                android:gravity="center_horizontal" />
 
         </LinearLayout>
 
@@ -110,8 +110,8 @@
                 android:text="@string/sec"
                 android:layout_centerHorizontal="true"
                 android:id="@+id/textViewSec"
-                android:gravity="center_horizontal"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:gravity="center_horizontal" />
 
             <EditText
                 android:layout_width="wrap_content"
@@ -125,7 +125,7 @@
                 android:numeric="integer"
                 android:selectAllOnFocus="true"
                 android:textStyle="bold"
-                android:paddingLeft="15dp" />
+                android:gravity="center_horizontal" />
         </LinearLayout>
 
     </LinearLayout>

@@ -14,7 +14,10 @@ public class DetailActivity extends ActionBarActivity {
         setContentView(R.layout.activity_detail);
         if (savedInstanceState == null) {
             Bundle arguments = new Bundle();
-            arguments.putParcelable(DetailFragment.DETAIL_URI, getIntent().getData());
+            arguments.putString("id", getIntent().getExtras().getString("id"));
+            arguments.putString("title", getIntent().getExtras().getString("title"));
+            arguments.putInt("time", getIntent().getExtras().getInt("time"));
+            arguments.putString("advice", getIntent().getExtras().getString("advice"));
 
             DetailFragment fragment = new DetailFragment();
             fragment.setArguments(arguments);

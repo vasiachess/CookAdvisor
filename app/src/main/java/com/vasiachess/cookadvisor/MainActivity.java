@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -59,13 +58,13 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
             editor.commit();
         }
 
-    Cursor cursor = this.getContentResolver().query(AdviceContract.AdviceEntry.CONTENT_URI, null,null, null, null);
-    cursor.moveToFirst();
-    for(int i = 0; i< cursor.getCount(); i++){
-        String title = cursor.getString(MainFragment.COL_TITLE);
-        Log.d(LOG_TAG, "inserted - " + title);
-        cursor.moveToNext();
-    }
+//    Cursor cursor = this.getContentResolver().query(AdviceContract.AdviceEntry.CONTENT_URI, null,null, null, null);
+//    cursor.moveToFirst();
+//    for(int i = 0; i< cursor.getCount(); i++){
+//        String title = cursor.getString(MainFragment.COL_TITLE);
+//        Log.d(LOG_TAG, "inserted - " + title);
+//        cursor.moveToNext();
+//    }
 
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
@@ -100,17 +99,12 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
 
 
     @Override
-    public void onItemSelected(Uri adviceUri) {
-        Intent intent = new Intent(this, DetailActivity.class)
-                .setData(adviceUri);
+    public void onItemSelected(String title, Integer time, String advice) {
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra("title", title);
+        intent.putExtra("time", time);
+        intent.putExtra("advice", advice);
         startActivity(intent);
     }
 
-    public String formatTime(int time) {
-
-        String seconds = String.valueOf(time % 60);
-        String minutes = String.valueOf(time / 60);
-
-        return seconds;
-    }
 }

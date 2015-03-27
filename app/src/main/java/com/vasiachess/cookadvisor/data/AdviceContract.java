@@ -32,8 +32,7 @@ public class AdviceContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        public static Uri buildAdviceWithTitle(
-                String title) {
+        public static Uri buildAdviceWithTitle(String title) {
 
             return CONTENT_URI.buildUpon().appendQueryParameter(COLUMN_TITLE, title).build();
         }

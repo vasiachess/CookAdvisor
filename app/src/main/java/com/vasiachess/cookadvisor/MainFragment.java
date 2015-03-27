@@ -37,17 +37,19 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             AdviceContract.AdviceEntry.TABLE_NAME + "." + AdviceContract.AdviceEntry._ID,
             AdviceContract.AdviceEntry.COLUMN_TITLE,
             AdviceContract.AdviceEntry.COLUMN_TIME,
+            AdviceContract.AdviceEntry.COLUMN_ADVICE,
     };
 
     static final int COL_ID = 0;
     static final int COL_TITLE = 1;
     static final int COL_TIME  = 2;
+    static final int COL_ADVICE = 3;
 
     public interface Callback {
         /**
          * DetailFragmentCallback for when an item has been selected.
          */
-        public void onItemSelected(Uri adviceUri);
+        public void onItemSelected(String title, Integer time, String advice);
     }
 
     public MainFragment() {
@@ -63,6 +65,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     private void onClickAdd() {
 
         Intent intent = new Intent(getActivity(), EditActivity.class);
+        intent.putExtra("title", "");
+        intent.putExtra("time", 0);
+        intent.putExtra("advice", "");
         startActivity(intent);
     }
 
@@ -91,10 +96,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 if (cursor != null) {
 
-                    ((Callback) getActivity())
-                            .onItemSelected(AdviceContract.AdviceEntry.buildAdviceWithTitle(
-                                    cursor.getString(COL_TITLE)
-                            ));
+                 ((Callback) getActivity()).onItemSelected(cursor.getString(COL_TITLE), cursor.getInt(COL_TIME), cursor.getString(COL_ADVICE));
 
                 }
 
@@ -112,7 +114,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         super.onActivityCreated(savedInstanceState);
     }
 
-    void onNewAdviceAdded() {
+    public void onNewAdviceAdded() {
         getLoaderManager().restartLoader(ADVICE_LOADER, null, this);
     }
 

@@ -30,7 +30,7 @@
 
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textViewTimer"
         android:layout_centerHorizontal="true"
@@ -56,7 +56,7 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/textViewLabel"
         android:layout_marginTop="5dp"
-        android:layout_above="@+id/buttonEdit">
+        android:layout_above="@+id/linearLayoutButtons">
 
         <TextView
             android:layout_width="match_parent"
@@ -65,12 +65,28 @@
             android:id="@+id/textViewAdvice" />
     </ScrollView>
 
-    <Button
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/edit"
-        android:id="@+id/buttonEdit"
+        android:id="@+id/linearLayoutButtons"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/edit"
+            android:id="@+id/buttonEdit"
+            android:layout_marginRight="15dp" />
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/delete"
+            android:id="@+id/buttonDelete"
+            android:layout_marginLeft="15dp" />
+    </LinearLayout>
 
 </RelativeLayout>
