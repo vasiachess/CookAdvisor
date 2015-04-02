@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">CookAdvisor</string>
     <string name="action_settings">Settings</string>
-    <string name="add">ADD NEW ADVICE</string>
+    <string name="add">Add new advice</string>
     <string name="title_activity_detail">DetailActivity</string>
     <string name="start">START</string>
     <string name="reset_time">RESET</string>

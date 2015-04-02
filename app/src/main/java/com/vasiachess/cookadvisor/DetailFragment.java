@@ -4,12 +4,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.vasiachess.cookadvisor.data.AdviceContract;
@@ -21,19 +21,20 @@ import java.sql.Time;
  */
 public class DetailFragment extends Fragment implements View.OnClickListener {
 
-    private Button btnStart;
+    public static Button btnStart;
     private Button btnEdit;
     private Button btnDelete;
     private TextView tvTitle;
-    private TextView tvTimer;
+    private ImageView ivIcon;
+    public static TextView tvTimer;
     private TextView tvAdvice;
-    private Time timeUntilFinish;
-
-    private String title = "";
+    private Time mtimeUntilFinish;
+    private Intent startIntent;
+    private static final String BUTTON_KEY = "button_state";
+    public static String title = "";
     private String advice = "";
 
-    protected CountDownTimer advCountDownTimer;
-    protected int advTime = 0;
+    public static int advTime = 0;
     private final String LOG_TAG = DetailFragment.class.getSimpleName();
 
 
@@ -52,6 +53,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
         btnDelete = (Button) rootView.findViewById(R.id.buttonDelete);
 
         tvTitle = (TextView) rootView.findViewById(R.id.textViewTitle);
+        ivIcon = (ImageView) rootView.findViewById(R.id.imageViewIcon);
         tvTimer = (TextView) rootView.findViewById(R.id.textViewTimer);
         tvAdvice = (TextView) rootView.findViewById(R.id.textViewAdvice);
 
@@ -60,11 +62,19 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
             title = arguments.getString("title");
             tvTitle.setText(title);
 
+            ivIcon.setImageResource(Utility.getIconResourceForTitle(title));
+
             advTime = arguments.getInt("time");
             setTimer();
 
             advice = arguments.getString("advice");
             tvAdvice.setText(advice);
+        }
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(BUTTON_KEY)) {
+            // The listview probably hasn't even been populated yet. Actually perform the
+            // swapout in onLoadFinished.
+            btnStart.setText(savedInstanceState.getString(BUTTON_KEY));
         }
 
         btnStart.setOnClickListener(this);
@@ -83,7 +93,6 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
         } else if (v == btnDelete) {
             onClickDelete();
         }
-
     }
 
     private void onClickDelete() {
@@ -111,73 +120,40 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
                 });
 
         builder.show();
-
     }
 
     private void onClickStart() {
         if (btnStart.getText() == getString(R.string.start)) {
             btnStart.setText(getString(R.string.reset_time));
-            startTimer();
-
-            Intent startIntent = new Intent(getActivity(), TimerService.class);
-            getActivity().startService(startIntent);
+            getActivity().startService(new Intent(getActivity(), TimerService.class));
 
         } else {
             btnStart.setText(getString(R.string.start));
-            resetTimer();
+            getActivity().stopService(new Intent(getActivity(), TimerService.class));
+            setTimer();
         }
     }
 
     private void onClickEdit() {
-
         Intent intent = new Intent(getActivity(), EditActivity.class);
         intent.putExtra("title", title);
         intent.putExtra("time", advTime);
         intent.putExtra("advice", advice);
         startActivity(intent);
-
     }
 
     private void setTimer() {
-
-        timeUntilFinish = new Time(advTime*1000);
-        tvTimer.setText(timeUntilFinish.toString());
-
-        advCountDownTimer = new CountDownTimer(advTime * 1000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                // выводим оставшееся время в текстовой метке
-
-                timeUntilFinish = new Time(millisUntilFinished);
-                tvTimer.setText(timeUntilFinish.toString());
-            }
-
-            @Override
-            public void onFinish() {
-
-                tvTimer.setText("Done!");
-                btnStart.setText(getString(R.string.start));
-            }
-        };
-
+        mtimeUntilFinish = new Time(advTime*1000);
+        tvTimer.setText(mtimeUntilFinish.toString());
     }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        // When tablets rotate, the currently selected button state needs to be saved.
 
-    private void startTimer() {
+            outState.putString(BUTTON_KEY, btnStart.getText().toString());
 
-        setTimer();
-        advCountDownTimer.start();
-        btnStart.setText(getString(R.string.reset_time));
+        super.onSaveInstanceState(outState);
     }
-
-
-    private void resetTimer() {
-        btnStart.setText(getString(R.string.start));
-        if(advCountDownTimer != null) {
-            advCountDownTimer.cancel();
-        }
-        setTimer();
-    }
-
 }
 
 

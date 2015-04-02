@@ -2,5 +2,14 @@
 <resources>
 
     <color name="advice_light_blue">#ff64c2f4</color>
+    <color name="bg_activity">#3399cc</color>
+    <color name="bg_et_distance">#99ffffff</color>
+    <color name="bg_dark">#047d83</color>
+    <color name="bg_light">#0599a0</color>
+    <color name="et_distance">#000</color>
+    <color name="bg_button">#ffdc38</color>
+    <color name="bg_btn_start">#ffdc38</color>
+    <color name="bg_btn_center">#edaa23</color>
+    <color name="bg_btn_end">#ffdc38</color>
 
 </resources>

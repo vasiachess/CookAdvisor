@@ -8,8 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.vasiachess.cookadvisor.data.AdviceContract;
 
@@ -19,6 +17,8 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String PREFS_NAME = "first_start";
     final String IS_FIRST_START = "IsFS";
+    private boolean mTwoPane;
+    private static final String DETAILFRAGMENT_TAG = "DFTAG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +28,9 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
         boolean isFirstStart = sp.getBoolean(IS_FIRST_START, true);
 
         if (isFirstStart) {
-            String[] mTitle = { "Title1", "Title2", "Title3", "Title4" };
-            Integer[] mTime = { 60, 120, 180, 200 };
-            String[] mAdvice = { "Advice1", "Advice2", "Advice3", "Advice4"  };
+            String[] mTitle = { "Pasta", "Egg", "Sausage", "Rice" };
+            Integer[] mTime = { 600, 180, 120, 1200 };
+            String[] mAdvice = { "Put pasta in the warm water. Add some oil and salt. Pasta will be delicious!", "Advice2", "Advice3", "Advice4"  };
 
             ContentValues adviceValues = new ContentValues();
 //            ContentValues[] cvArray = new ContentValues[mTitle.length];
@@ -66,36 +66,59 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
 //        cursor.moveToNext();
 //    }
 
-        setContentView(R.layout.activity_main);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new MainFragment())
-                    .commit();
+//        setContentView(R.layout.activity_main);
+//        if (savedInstanceState == null) {
+//            getSupportFragmentManager().beginTransaction()
+//                    .add(R.id.container, new MainFragment())
+//                    .commit();
+
+
+            if (findViewById(R.id.advice_detail_container) != null) {
+                // The detail container view will be present only in the large-screen layouts
+                // (res/layout-sw600dp). If this view is present, then the activity should be
+                // in two-pane mode.
+                mTwoPane = true;
+                // In two-pane mode, show the detail view in this activity by
+                // adding or replacing the detail fragment using a
+                // fragment transaction.
+                if (savedInstanceState == null) {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.advice_detail_container, new DetailFragment(), DETAILFRAGMENT_TAG)
+                            .commit();
+                }
+            } else {
+                mTwoPane = false;
+                getSupportActionBar().setElevation(0f);
+            }
+
+            MainFragment mainFragment = ((MainFragment)getSupportFragmentManager()
+                    .findFragmentById(R.id.fragment_main));
+
         }
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
 
     @Override

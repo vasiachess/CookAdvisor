@@ -30,7 +30,7 @@ public class EditFragment extends Fragment implements View.OnClickListener {
     private final String LOG_TAG = EditFragment.class.getSimpleName();
     private boolean newItem = true;
     private String title = "";
-    private Integer time = 0;
+    private Integer mtime = 0;
 
 
 
@@ -58,14 +58,14 @@ public class EditFragment extends Fragment implements View.OnClickListener {
             title = arguments.getString("title");
 
             if (!title.equals("")) {
-            time = arguments.getInt("time");
+            mtime = arguments.getInt("time");
             String advice = arguments.getString("advice");
 
             etTitle.setText(title);
 
-            Integer h = time / 3600;
-            Integer m = (time % 3600) / 60;
-            Integer s = time % 60;
+            Integer h = mtime / 3600;
+            Integer m = (mtime % 3600) / 60;
+            Integer s = mtime % 60;
 
             etHour.setText(h.toString());
             etMin.setText(m.toString());
@@ -116,6 +116,7 @@ public class EditFragment extends Fragment implements View.OnClickListener {
         adviceValues.put(AdviceContract.AdviceEntry.COLUMN_TITLE, etTitle.getText().toString());
 
         int cookTime = hour*3600 + min*60 + sec;
+            Log.d(LOG_TAG, "hour = "+ hour + "Cook Time = " + cookTime);
         adviceValues.put(AdviceContract.AdviceEntry.COLUMN_TIME, cookTime);
 
         adviceValues.put(AdviceContract.AdviceEntry.COLUMN_ADVICE, etAdvice.getText().toString());
@@ -125,7 +126,7 @@ public class EditFragment extends Fragment implements View.OnClickListener {
             Log.d(LOG_TAG, "inserted - " + title);
 
         } else {
-            int upd = getActivity().getContentResolver().update(AdviceContract.AdviceEntry.CONTENT_URI, adviceValues, "title = ? and time = ?", new String[] { title, String.valueOf(time)});
+            int upd = getActivity().getContentResolver().update(AdviceContract.AdviceEntry.CONTENT_URI, adviceValues, "title = ? and time = ?", new String[] { title, String.valueOf(mtime)});
             Log.d(LOG_TAG, "updated - " + title);
         }
 

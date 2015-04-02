@@ -50,12 +50,12 @@ public class AdviceAdapter extends CursorAdapter {
 
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-        viewHolder.iconView.setImageResource(R.drawable.timer);
-
         String title = cursor.getString(MainFragment.COL_TITLE);
         viewHolder.titleView.setText(title);
 
-        String timer = String.valueOf(cursor.getInt(MainFragment.COL_TIME));
-        viewHolder.timerView.setText(timer);
+        viewHolder.iconView.setImageResource(Utility.getIconResourceForTitle(title));
+
+        Integer timer = cursor.getInt(MainFragment.COL_TIME);
+        viewHolder.timerView.setText(Utility.getTime(timer));
     }
 }

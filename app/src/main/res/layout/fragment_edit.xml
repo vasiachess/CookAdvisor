@@ -1,10 +1,15 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.vasiachess.cookadvisor.EditFragment" >
+
+<RelativeLayout  android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.vasiachess.cookadvisor.EditActivity$PlaceholderFragment">
+    android:paddingBottom="@dimen/activity_vertical_margin">
 
 
     <TextView
@@ -15,7 +20,9 @@
         android:id="@+id/tvTitleLabel"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp" />
 
     <EditText
         android:layout_width="match_parent"
@@ -25,7 +32,10 @@
         android:layout_toRightOf="@+id/tvTitleLabel"
         android:layout_toEndOf="@+id/tvTitleLabel"
         android:layout_marginLeft="10dp"
-        android:hint="@string/hint_title" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        style="@style/EditTextMain"
+        android:hint="@string/hint_title"
+        android:layout_marginTop="10dp" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -34,7 +44,7 @@
         android:id="@+id/linearLayout"
         android:layout_below="@+id/editTextTitle"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp">
+        android:layout_marginTop="20dp">
 
         <LinearLayout
             android:orientation="vertical"
@@ -63,6 +73,7 @@
                 android:maxLength="2"
                 android:selectAllOnFocus="true"
                 android:textStyle="bold"
+                style="@style/EditTextMain"
                 android:gravity="center_horizontal" />
         </LinearLayout>
 
@@ -95,6 +106,7 @@
                 android:numeric="integer"
                 android:selectAllOnFocus="true"
                 android:textStyle="bold"
+                style="@style/EditTextMain"
                 android:gravity="center_horizontal" />
 
         </LinearLayout>
@@ -125,6 +137,7 @@
                 android:numeric="integer"
                 android:selectAllOnFocus="true"
                 android:textStyle="bold"
+                style="@style/EditTextMain"
                 android:gravity="center_horizontal" />
         </LinearLayout>
 
@@ -149,19 +162,26 @@
         android:layout_below="@+id/tvAdviceLabel"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
-        android:layout_above="@+id/buttonSave"
         android:hint="@string/hint_advice"
         android:elegantTextHeight="false"
         android:linksClickable="true"
         android:paddingLeft="15dp"
-        android:gravity="top|left" />
+        style="@style/EditTextMain"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:gravity="top|left"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/save"
         android:id="@+id/buttonSave"
+        android:layout_below="@+id/editTextAdvice"
+        android:background="@drawable/selector_btn"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" />
 
 </RelativeLayout>
+</ScrollView>
