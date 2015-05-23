@@ -12,7 +12,7 @@ public class DetailActivity extends ActionBarActivity {
         setContentView(R.layout.activity_detail);
         if (savedInstanceState == null) {
             Bundle arguments = new Bundle();
-            arguments.putString("id", getIntent().getExtras().getString("id"));
+//            arguments.putString("id", getIntent().getExtras().getString("id"));
             arguments.putString("title", getIntent().getExtras().getString("title"));
             arguments.putInt("time", getIntent().getExtras().getInt("time"));
             arguments.putString("advice", getIntent().getExtras().getString("advice"));
@@ -21,7 +21,7 @@ public class DetailActivity extends ActionBarActivity {
             fragment.setArguments(arguments);
 
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, fragment)
+                    .add(R.id.advice_detail_container, fragment)
                     .commit();
         }
     }

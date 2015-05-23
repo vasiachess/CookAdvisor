@@ -44,6 +44,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     static final int COL_TITLE = 1;
     static final int COL_TIME  = 2;
     static final int COL_ADVICE = 3;
+    private static final String EDITFRAGMENT_TAG = "EFTAG";
 
     public interface Callback {
         /**
@@ -64,11 +65,32 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
     private void onClickAdd() {
 
-        Intent intent = new Intent(getActivity(), EditActivity.class);
-        intent.putExtra("title", "");
-        intent.putExtra("time", 0);
-        intent.putExtra("advice", "");
-        startActivity(intent);
+        if (MainActivity.mTwoPane) {
+            // In two-pane mode, show the edit view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            Bundle arguments = new Bundle();
+
+            arguments.putString("title", "");
+            arguments.putInt("time", 0);
+            arguments.putString("advice", "");
+
+            EditFragment fragment = new EditFragment();
+            fragment.setArguments(arguments);
+
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.advice_detail_container, fragment, EDITFRAGMENT_TAG)
+                    .commit();
+        } else {
+            Intent intent = new Intent(getActivity(), EditActivity.class);
+            intent.putExtra("title", "");
+            intent.putExtra("time", 0);
+            intent.putExtra("advice", "");
+            startActivity(intent);
+        }
+
+
+
     }
 
 

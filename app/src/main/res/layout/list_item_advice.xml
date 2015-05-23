@@ -7,26 +7,26 @@
     android:padding="1dp"
     android:background="@drawable/touch_selector">
     <FrameLayout
-        android:layout_width="30dp"
+        android:layout_width="70dp"
         android:layout_height="wrap_content"
-        android:layout_weight="3"
         android:layout_marginLeft="5dp">
         <ImageView
             android:id="@+id/list_item_icon"
             android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="7">
+        android:layout_weight="1">
 
     <TextView
             android:id="@+id/list_item_title_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="left"
             android:layout_marginLeft="5dp"
 
             android:fontFamily="sans-serif-condensed"
@@ -34,17 +34,17 @@
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="3">
+        android:layout_weight="1">
     <TextView
             android:id="@+id/list_item_timer_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
 
-            android:layout_gravity="center"
+            android:layout_gravity="right"
             android:fontFamily="sans-serif-condensed"
-            android:textAppearance="?android:textAppearanceLarge"/>
+            android:textAppearance="?android:textAppearanceMedium"/>
     </FrameLayout>
 </LinearLayout>

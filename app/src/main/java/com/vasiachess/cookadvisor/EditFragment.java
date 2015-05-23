@@ -31,6 +31,7 @@ public class EditFragment extends Fragment implements View.OnClickListener {
     private boolean newItem = true;
     private String title = "";
     private Integer mtime = 0;
+    private static final String DETAILFRAGMENT_TAG = "DFTAG";
 
 
 
@@ -130,8 +131,29 @@ public class EditFragment extends Fragment implements View.OnClickListener {
             Log.d(LOG_TAG, "updated - " + title);
         }
 
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        startActivity(intent);
+            if (MainActivity.mTwoPane) {
+                // In two-pane mode, show the detail view in this activity by
+                // adding or replacing the detail fragment using a
+                // fragment transaction.
+                Bundle arguments = new Bundle();
+
+                arguments.putString("title", title);
+                arguments.putInt("time", cookTime);
+                arguments.putString("advice", etAdvice.getText().toString());
+
+                DetailFragment fragment = new DetailFragment();
+                fragment.setArguments(arguments);
+
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.advice_detail_container, fragment, DETAILFRAGMENT_TAG)
+                        .commit();
+            } else {
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
+                intent.putExtra("title", title);
+                intent.putExtra("time", cookTime);
+                intent.putExtra("advice", etAdvice.getText().toString());
+                startActivity(intent);
+            }
         };
     }
 

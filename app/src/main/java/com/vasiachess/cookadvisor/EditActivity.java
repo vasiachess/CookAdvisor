@@ -20,7 +20,7 @@ public class EditActivity extends ActionBarActivity {
             fragment.setArguments(arguments);
 
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, fragment)
+                    .add(R.id.advice_detail_container, fragment)
                     .commit();
         }
     }

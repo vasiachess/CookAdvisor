@@ -17,20 +17,26 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String PREFS_NAME = "first_start";
     final String IS_FIRST_START = "IsFS";
-    private boolean mTwoPane;
+    public static boolean mTwoPane;
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         SharedPreferences sp = this.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         boolean isFirstStart = sp.getBoolean(IS_FIRST_START, true);
+        Log.d(LOG_TAG, " OnCreate " );
+        Utility.id = 0;
 
         if (isFirstStart) {
-            String[] mTitle = { "Pasta", "Egg", "Sausage", "Rice" };
-            Integer[] mTime = { 600, 180, 120, 1200 };
-            String[] mAdvice = { "Put pasta in the warm water. Add some oil and salt. Pasta will be delicious!", "Advice2", "Advice3", "Advice4"  };
+            String[] mTitle = { "Pasta", "Egg", "Sausage", "White Rice" };
+            Integer[] mTime = { 600, 180, 120, 900 };
+            String[] mAdvice = { "Put pasta in the warm water. Add some oil and salt. Pasta will be delicious!",
+                    "Put egg in the warm water. When egg is done, put it in cold water. Then it will be easy to clean from the shell",
+                    "Put sausage in the warm water. When sausage is done, put it in cold water for a second.",
+                    "The ratio of water to rice is 2 to 1. Put rice in the cold water."  };
 
             ContentValues adviceValues = new ContentValues();
 //            ContentValues[] cvArray = new ContentValues[mTitle.length];
@@ -66,7 +72,7 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
 //        cursor.moveToNext();
 //    }
 
-//        setContentView(R.layout.activity_main);
+
 //        if (savedInstanceState == null) {
 //            getSupportFragmentManager().beginTransaction()
 //                    .add(R.id.container, new MainFragment())
@@ -91,11 +97,9 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
                 getSupportActionBar().setElevation(0f);
             }
 
-            MainFragment mainFragment = ((MainFragment)getSupportFragmentManager()
-                    .findFragmentById(R.id.fragment_main));
 
-        }
     }
+
 
 
 //    @Override
@@ -123,11 +127,30 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
 
     @Override
     public void onItemSelected(String title, Integer time, String advice) {
-        Intent intent = new Intent(this, DetailActivity.class);
-        intent.putExtra("title", title);
-        intent.putExtra("time", time);
-        intent.putExtra("advice", advice);
-        startActivity(intent);
+
+        if (mTwoPane) {
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            Bundle arguments = new Bundle();
+
+            arguments.putString("title", title);
+            arguments.putInt("time", time);
+            arguments.putString("advice", advice);
+
+            DetailFragment fragment = new DetailFragment();
+            fragment.setArguments(arguments);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.advice_detail_container, fragment, DETAILFRAGMENT_TAG)
+                    .commit();
+        } else {
+            Intent intent = new Intent(this, DetailActivity.class);
+            intent.putExtra("title", title);
+            intent.putExtra("time", time);
+            intent.putExtra("advice", advice);
+            startActivity(intent);
+        }
     }
 
 }
