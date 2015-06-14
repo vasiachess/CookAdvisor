@@ -8,13 +8,13 @@
 
     <!-- Main activity theme. -->
     <style name="AdviceTheme" parent="AppTheme">
-        <item name="actionBarStyle">@style/ActionBar.Solid.Sunshine.NoTitle</item>
+        <item name="actionBarStyle">@style/ActionBar.Solid.CookAdvisor.NoTitle</item>
     </style>
 
     <!-- main activity action bar styles -->
-    <style name="ActionBar.Solid.Sunshine.NoTitle" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
-        <item name="displayOptions">useLogo|showHome</item>
-        <item name="logo">@mipmap/ic_launcher</item>
+    <style name="ActionBar.Solid.CookAdvisor.NoTitle" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="displayOptions">useLogo|showHome|</item>
+        <item name="logo">@drawable/ic_logo</item>
     </style>
 
 

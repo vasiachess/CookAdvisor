@@ -137,7 +137,7 @@ public class EditFragment extends Fragment implements View.OnClickListener {
                 // fragment transaction.
                 Bundle arguments = new Bundle();
 
-                arguments.putString("title", title);
+                arguments.putString("title", etTitle.getText().toString());
                 arguments.putInt("time", cookTime);
                 arguments.putString("advice", etAdvice.getText().toString());
 
@@ -149,7 +149,7 @@ public class EditFragment extends Fragment implements View.OnClickListener {
                         .commit();
             } else {
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
-                intent.putExtra("title", title);
+                intent.putExtra("title", etTitle.getText().toString());
                 intent.putExtra("time", cookTime);
                 intent.putExtra("advice", etAdvice.getText().toString());
                 startActivity(intent);

@@ -10,6 +10,7 @@
         android:largeHeap="true">
         <activity
             android:name="com.vasiachess.cookadvisor.MainActivity"
+            android:theme="@style/AdviceTheme"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,6 +21,7 @@
         <activity
             android:name="com.vasiachess.cookadvisor.DetailActivity"
             android:label="@string/title_activity_detail"
+            android:theme="@style/AdviceTheme"
             android:parentActivityName="com.vasiachess.cookadvisor.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -32,7 +34,8 @@
 
         <activity
             android:name="com.vasiachess.cookadvisor.EditActivity"
-            android:label="@string/title_activity_edit" >
+            android:label="@string/title_activity_edit"
+            android:theme="@style/AdviceTheme">
         </activity>
 
         <service android:name=".TimerService"

@@ -39,7 +39,7 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
                     "The ratio of water to rice is 2 to 1. Put rice in the cold water."  };
 
             ContentValues adviceValues = new ContentValues();
-//            ContentValues[] cvArray = new ContentValues[mTitle.length];
+
             try {
             for (int j = 0; j < mTitle.length; j++) {
                 adviceValues.put(AdviceContract.AdviceEntry.COLUMN_TITLE, mTitle[j]);
@@ -49,9 +49,6 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
                 Log.d(LOG_TAG, String.valueOf(j) + " - " + mTitle[j]);
             }
 
-//            int inserted = 0;
-//                inserted = this.getContentResolver().bulkInsert(AdviceContract.AdviceEntry.CONTENT_URI, cvArray);
-//                Log.d(LOG_TAG, "inserted - " + String.valueOf(inserted) + " items");
             } catch (Exception e) {
                 Log.e(LOG_TAG, e.getMessage(), e);
                 e.printStackTrace();
@@ -63,21 +60,6 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
             editor.putBoolean(IS_FIRST_START, isFirstStart);
             editor.commit();
         }
-
-//    Cursor cursor = this.getContentResolver().query(AdviceContract.AdviceEntry.CONTENT_URI, null,null, null, null);
-//    cursor.moveToFirst();
-//    for(int i = 0; i< cursor.getCount(); i++){
-//        String title = cursor.getString(MainFragment.COL_TITLE);
-//        Log.d(LOG_TAG, "inserted - " + title);
-//        cursor.moveToNext();
-//    }
-
-
-//        if (savedInstanceState == null) {
-//            getSupportFragmentManager().beginTransaction()
-//                    .add(R.id.container, new MainFragment())
-//                    .commit();
-
 
             if (findViewById(R.id.advice_detail_container) != null) {
                 // The detail container view will be present only in the large-screen layouts
@@ -99,31 +81,6 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
 
 
     }
-
-
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-
 
     @Override
     public void onItemSelected(String title, Integer time, String advice) {

@@ -58,7 +58,6 @@ public class TimerService extends Service {
         advCountDownTimer = new CountDownTimer(maxTime, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                // выводим оставшееся время в текстовой метке
 
                 timeUntilFinish = (int) millisUntilFinished/1000;
 

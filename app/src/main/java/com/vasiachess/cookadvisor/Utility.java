@@ -30,9 +30,6 @@ public class Utility {
         Integer s = timeInSec % 60;
         String stringTime = String.format("%02d:%02d:%02d", h, m, s);
         return stringTime;
-//        timeUntilFinish = new Time(timeInSec*1000);
-//        return timeUntilFinish.toString();
-
     }
 
 }
