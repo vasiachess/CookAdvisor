@@ -5,8 +5,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -23,21 +28,25 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
     public static Button btnStart;
     private Button btnEdit;
     private Button btnDelete;
-    public static  TextView tvTitle;
-    public static ImageView ivIcon;
+    public static TextView tvTitle;
+    public ImageView ivIcon;
     public static TextView tvTimer;
     private TextView tvAdvice;
-    private static final String BUTTON_KEY = "button_state";
+    private final String BUTTON_KEY = "button_state";
     public static String title = "";
     private String advice = "";
+    private ShareActionProvider mShareActionProvider;
+    private String mAdvice;
 
     public static int advTime = 0;
     private final String LOG_TAG = DetailFragment.class.getSimpleName();
     private static final String EDITFRAGMENT_TAG = "EFTAG";
+    private static final String ADVICE_SHARE_HASHTAG = " #CookAdvisorApp";
 
 
 
     public DetailFragment() {
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -180,6 +189,27 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+// Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.menu_detail, menu);
+// Retrieve the share menu item
+        MenuItem menuItem = menu.findItem(R.id.action_share);
+// Get the provider and hold onto it to set/change the share intent.
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+
+        mAdvice = String.format("%s - %s - %s", tvTitle.getText(), Utility.getTime(advTime), tvAdvice.getText());
+
+        mShareActionProvider.setShareIntent(createShareAdviceIntent());
+    }
+
+    private Intent createShareAdviceIntent() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, mAdvice + ADVICE_SHARE_HASHTAG);
+        return shareIntent;
+    }
 
 }
 

@@ -23,6 +23,7 @@ public class TimerService extends Service {
     protected CountDownTimer advCountDownTimer;
     MediaPlayer mediaPlayer;
     private int currentId;
+    DetailFragment detailFragment;
 
     public void onCreate() {
         super.onCreate();
@@ -46,15 +47,15 @@ public class TimerService extends Service {
 
         currentId=Utility.id;
 
-        DetailFragment.tvTimer.setText(Utility.getTime(DetailFragment.advTime));
-        currentTitle = DetailFragment.title;
+        detailFragment.tvTimer.setText(Utility.getTime(detailFragment.advTime));
+        currentTitle = detailFragment.title;
 
         mBuilder = new NotificationCompat.Builder(this);
         mBuilder.setContentTitle("CookAdvisor")
                 .setContentText(currentTitle + " in progress")
                 .setSmallIcon(Utility.getIconResourceForTitle(currentTitle));
 
-        final int maxTime = DetailFragment.advTime * 1000;
+        final int maxTime = detailFragment.advTime * 1000;
         advCountDownTimer = new CountDownTimer(maxTime, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -62,12 +63,12 @@ public class TimerService extends Service {
                 timeUntilFinish = (int) millisUntilFinished/1000;
 
                 if (currentTitle.equals(DetailFragment.tvTitle.getText().toString())) {
-                    DetailFragment.tvTimer.setText(Utility.getTime(timeUntilFinish));
+                    detailFragment.tvTimer.setText(Utility.getTime(timeUntilFinish));
 //                    DetailFragment.tvTitle.setText(currentTitle);
-                    DetailFragment.btnStart.setText(getString(R.string.reset_time));
+                    detailFragment.btnStart.setText(getString(R.string.reset_time));
 //                    DetailFragment.ivIcon.setImageResource(Utility.getIconResourceForTitle(currentTitle));
                 } else {
-                    DetailFragment.btnStart.setEnabled(false);
+                    detailFragment.btnStart.setEnabled(false);
                 }
 
                 Integer inc = (int) (long) millisUntilFinished;
@@ -84,9 +85,9 @@ public class TimerService extends Service {
                         .setProgress(0,0,false);
                 mNotifyManager.notify(currentId, mBuilder.build());
 
-                if (currentTitle.equals(DetailFragment.tvTitle.getText().toString())) {
-                    DetailFragment.tvTimer.setText("Done!");
-                    DetailFragment.btnStart.setText(getString(R.string.start));
+                if (currentTitle.equals(detailFragment.tvTitle.getText().toString())) {
+                    detailFragment.tvTimer.setText(getString(R.string.done));
+                    detailFragment.btnStart.setText(getString(R.string.start));
                 }
                 mediaPlayer = new  MediaPlayer();
                 mediaPlayer = MediaPlayer.create(getBaseContext(), R.raw.done);
