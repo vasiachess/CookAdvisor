@@ -1,9 +1,13 @@
 package com.vasiachess.cookadvisor;
 
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
@@ -37,9 +41,14 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
     private String advice = "";
     private ShareActionProvider mShareActionProvider;
     private String mAdvice;
+    private PendingIntent pIntent;
+
+    boolean bound = false;
+    ServiceConnection sConn;
+    TimerService timerService;
 
     public static int advTime = 0;
-    private final String LOG_TAG = DetailFragment.class.getSimpleName();
+    private final String LOG_TAG = "MyLog: " + DetailFragment.class.getSimpleName();
     private static final String EDITFRAGMENT_TAG = "EFTAG";
     private static final String ADVICE_SHARE_HASHTAG = " #CookAdvisorApp";
 
@@ -67,15 +76,15 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
 
         Bundle arguments = getArguments();
         if (arguments != null) {
-            title = arguments.getString("title");
+            title = arguments.getString(Utility.TITLE);
             tvTitle.setText(title);
 
             ivIcon.setImageResource(Utility.getIconResourceForTitle(title));
 
-            advTime = arguments.getInt("time");
+            advTime = arguments.getInt(Utility.TIME);
             setTimer();
 
-            advice = arguments.getString("advice");
+            advice = arguments.getString(Utility.ADVICE);
             tvAdvice.setText(advice);
 
             btnEdit.setEnabled(true);
@@ -93,10 +102,42 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
         btnEdit.setOnClickListener(this);
         btnDelete.setOnClickListener(this);
 
+	    sConn = new ServiceConnection() {
+		    public void onServiceConnected(ComponentName name, IBinder binder) {
+			    Log.d(LOG_TAG, "onServiceConnected");
+			    timerService = ((TimerService.MyBinder) binder).getService();
+			    bound = true;
+		    }
+
+		    public void onServiceDisconnected(ComponentName name) {
+			    Log.d(LOG_TAG, "onServiceDisconnected");
+			    bound = false;
+		    }
+	    };
+
+	    getActivity().bindService(new Intent(getActivity(), TimerService.class), sConn, 0);
+
+	    if (Utility.id == 0) {
+		    Log.d(LOG_TAG, "Start service id = " + Utility.id);
+		    Intent intent = new Intent(getActivity(), TimerService.class);
+		    getActivity().startService(intent);
+	    }
+
         return rootView;
     }
 
-    @Override
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+
+		if (Utility.id == 0) {
+			Log.d(LOG_TAG, "Stop service id = " + Utility.id);
+			Intent intent = new Intent(getActivity(), TimerService.class);
+			getActivity().stopService(intent);
+		}
+	}
+
+	@Override
     public void onClick(View v) {
         if (v == btnStart) {
             onClickStart();
@@ -135,13 +176,17 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
     }
 
     private void onClickStart() {
+
         if (btnStart.getText() == getString(R.string.start)) {
-            btnStart.setText(getString(R.string.reset_time));
-            getActivity().startService(new Intent(getActivity(), TimerService.class));
-            ++Utility.id;
+	        btnStart.setText(getString(R.string.reset_time));
+
+	        timerService.startTimer(title, advTime, advice);
+
         } else {
             btnStart.setText(getString(R.string.start));
-            getActivity().stopService(new Intent(getActivity(), TimerService.class));
+
+            timerService.stopTimer(title);
+
             setTimer();
         }
     }
@@ -153,9 +198,9 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
             // fragment transaction.
             Bundle arguments = new Bundle();
 
-            arguments.putString("title", title);
-            arguments.putInt("time", advTime);
-            arguments.putString("advice", advice);
+            arguments.putString(Utility.TITLE, title);
+            arguments.putInt(Utility.TIME, advTime);
+            arguments.putString(Utility.ADVICE, advice);
 
             EditFragment fragment = new EditFragment();
             fragment.setArguments(arguments);
@@ -165,9 +210,9 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
                     .commit();
         } else {
             Intent intent = new Intent(getActivity(), EditActivity.class);
-            intent.putExtra("title", title);
-            intent.putExtra("time", advTime);
-            intent.putExtra("advice", advice);
+            intent.putExtra(Utility.TITLE, title);
+            intent.putExtra(Utility.TIME, advTime);
+            intent.putExtra(Utility.ADVICE, advice);
             startActivity(intent);
         }
 
@@ -210,7 +255,6 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
         shareIntent.putExtra(Intent.EXTRA_TEXT, mAdvice + ADVICE_SHARE_HASHTAG);
         return shareIntent;
     }
-
 }
 
 

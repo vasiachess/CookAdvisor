@@ -12,9 +12,9 @@ public class EditActivity extends ActionBarActivity {
         setContentView(R.layout.activity_edit);
         if (savedInstanceState == null) {
             Bundle arguments = new Bundle();
-            arguments.putString("title", getIntent().getExtras().getString("title"));
-            arguments.putInt("time", getIntent().getExtras().getInt("time"));
-            arguments.putString("advice", getIntent().getExtras().getString("advice"));
+            arguments.putString(Utility.TITLE, getIntent().getExtras().getString(Utility.TITLE));
+            arguments.putInt(Utility.TIME, getIntent().getExtras().getInt(Utility.TIME));
+            arguments.putString(Utility.ADVICE, getIntent().getExtras().getString(Utility.ADVICE));
 
             EditFragment fragment = new EditFragment();
             fragment.setArguments(arguments);
@@ -24,5 +24,4 @@ public class EditActivity extends ActionBarActivity {
                     .commit();
         }
     }
-
 }

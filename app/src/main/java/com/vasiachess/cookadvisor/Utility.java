@@ -7,7 +7,10 @@ package com.vasiachess.cookadvisor;
  */
 public class Utility {
 
-   public static int id;
+   public static int id = 0;
+   public static final String TITLE = "title";
+   public static final String TIME = "time";
+   public static final String ADVICE = "advice";
 
    public static int getIconResourceForTitle(String title) {
 

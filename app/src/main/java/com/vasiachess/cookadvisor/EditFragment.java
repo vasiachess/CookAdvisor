@@ -56,11 +56,11 @@ public class EditFragment extends Fragment implements View.OnClickListener {
         Bundle arguments = getArguments();
         if (arguments != null) {
 
-            title = arguments.getString("title");
+            title = arguments.getString(Utility.TITLE);
 
             if (!title.equals("")) {
-            mtime = arguments.getInt("time");
-            String advice = arguments.getString("advice");
+            mtime = arguments.getInt(Utility.TIME);
+            String advice = arguments.getString(Utility.ADVICE);
 
             etTitle.setText(title);
 
@@ -137,9 +137,9 @@ public class EditFragment extends Fragment implements View.OnClickListener {
                 // fragment transaction.
                 Bundle arguments = new Bundle();
 
-                arguments.putString("title", etTitle.getText().toString());
-                arguments.putInt("time", cookTime);
-                arguments.putString("advice", etAdvice.getText().toString());
+                arguments.putString(Utility.TITLE, etTitle.getText().toString());
+                arguments.putInt(Utility.TIME, cookTime);
+                arguments.putString(Utility.ADVICE, etAdvice.getText().toString());
 
                 DetailFragment fragment = new DetailFragment();
                 fragment.setArguments(arguments);
@@ -149,9 +149,9 @@ public class EditFragment extends Fragment implements View.OnClickListener {
                         .commit();
             } else {
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
-                intent.putExtra("title", etTitle.getText().toString());
-                intent.putExtra("time", cookTime);
-                intent.putExtra("advice", etAdvice.getText().toString());
+                intent.putExtra(Utility.TITLE, etTitle.getText().toString());
+                intent.putExtra(Utility.TIME, cookTime);
+                intent.putExtra(Utility.ADVICE, etAdvice.getText().toString());
                 startActivity(intent);
             }
         };

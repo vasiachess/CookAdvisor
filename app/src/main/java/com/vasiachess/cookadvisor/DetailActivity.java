@@ -1,7 +1,9 @@
 package com.vasiachess.cookadvisor;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 
 
 public class DetailActivity extends ActionBarActivity {
@@ -12,20 +14,24 @@ public class DetailActivity extends ActionBarActivity {
         setContentView(R.layout.activity_detail);
         if (savedInstanceState == null) {
             Bundle arguments = new Bundle();
-//            arguments.putString("id", getIntent().getExtras().getString("id"));
-            arguments.putString("title", getIntent().getExtras().getString("title"));
-            arguments.putInt("time", getIntent().getExtras().getInt("time"));
-            arguments.putString("advice", getIntent().getExtras().getString("advice"));
+            arguments.putString(Utility.TITLE, getIntent().getExtras().getString(Utility.TITLE));
+            arguments.putInt(Utility.TIME, getIntent().getExtras().getInt(Utility.TIME));
+            arguments.putString(Utility.ADVICE, getIntent().getExtras().getString(Utility.ADVICE));
 
             DetailFragment fragment = new DetailFragment();
             fragment.setArguments(arguments);
 
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.advice_detail_container, fragment)
-                    .commit();
+                    .replace(R.id.advice_detail_container, fragment)
+					.addToBackStack(null)
+	                .commit();
         }
     }
 
-
-
+	@Override
+	public void onBackPressed() {
+        Intent i = new Intent(Intent.ACTION_MAIN);
+        i.addCategory(Intent.CATEGORY_HOME);
+        startActivity(i);
+	}
 }

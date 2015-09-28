@@ -71,9 +71,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             // fragment transaction.
             Bundle arguments = new Bundle();
 
-            arguments.putString("title", "");
-            arguments.putInt("time", 0);
-            arguments.putString("advice", "");
+            arguments.putString(Utility.TITLE, "");
+            arguments.putInt(Utility.TIME, 0);
+            arguments.putString(Utility.ADVICE, "");
 
             EditFragment fragment = new EditFragment();
             fragment.setArguments(arguments);
@@ -83,9 +83,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     .commit();
         } else {
             Intent intent = new Intent(getActivity(), EditActivity.class);
-            intent.putExtra("title", "");
-            intent.putExtra("time", 0);
-            intent.putExtra("advice", "");
+            intent.putExtra(Utility.TITLE, "");
+            intent.putExtra(Utility.TIME, 0);
+            intent.putExtra(Utility.ADVICE, "");
             startActivity(intent);
         }
 

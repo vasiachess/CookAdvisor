@@ -28,7 +28,6 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
         SharedPreferences sp = this.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         boolean isFirstStart = sp.getBoolean(IS_FIRST_START, true);
         Log.d(LOG_TAG, " OnCreate " );
-        Utility.id = 0;
 
         if (isFirstStart) {
             String[] mTitle = { "Pasta", "Egg", "Sausage", "White Rice" };
@@ -91,9 +90,9 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
             // fragment transaction.
             Bundle arguments = new Bundle();
 
-            arguments.putString("title", title);
-            arguments.putInt("time", time);
-            arguments.putString("advice", advice);
+            arguments.putString(Utility.TITLE, title);
+            arguments.putInt(Utility.TIME, time);
+            arguments.putString(Utility.ADVICE, advice);
 
             DetailFragment fragment = new DetailFragment();
             fragment.setArguments(arguments);
@@ -103,11 +102,10 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
                     .commit();
         } else {
             Intent intent = new Intent(this, DetailActivity.class);
-            intent.putExtra("title", title);
-            intent.putExtra("time", time);
-            intent.putExtra("advice", advice);
+            intent.putExtra(Utility.TITLE, title);
+            intent.putExtra(Utility.TIME, time);
+            intent.putExtra(Utility.ADVICE, advice);
             startActivity(intent);
         }
     }
-
 }
