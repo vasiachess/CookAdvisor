@@ -21,5 +21,8 @@
     <string name="hint_time">Please, insert valid time!</string>
     <string name="edit">EDIT</string>
     <string name="delete">DELETE</string>
+    <string name="Delete">Delete</string>
+    <string name="Cancel">Cancel</string>
     <string name="done">Done!</string>
+    <string name="is_preparing">is preparing</string>
 </resources>

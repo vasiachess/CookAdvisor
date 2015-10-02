@@ -26,17 +26,13 @@ public class TimerService extends Service {
     private final String LOG_TAG = "MyLog: " + TimerService.class.getSimpleName();
     NotificationManager mNotifyManager;
     NotificationCompat.Builder mBuilder;
-//    private int timeUntilFinish;
-    private String currentTitle;
     protected CountDownTimer advCountDownTimer;
     MediaPlayer mediaPlayer;
     private int currentId = 0;
     private int id = 0;
     private ArrayList<CountDownTimer> countDownTimers = new ArrayList<>();
-//    private ArrayList<String> titles = new ArrayList<>();
     private String[] titles = new String[20];
     private HashMap<String, Integer> timerIds = new HashMap<>();
-    DetailFragment detailFragment;
 
     MyBinder binder = new MyBinder();
 
@@ -61,7 +57,6 @@ public class TimerService extends Service {
         if(advCountDownTimer != null) {
             advCountDownTimer.cancel();
         }
-//        mNotifyManager.cancel(id);
     }
 
     class MyBinder extends Binder {
@@ -86,8 +81,6 @@ public class TimerService extends Service {
 		timerIds.put(timerName, id);
 		Log.d(LOG_TAG, "startTimer " + titles[id] + " id = " + String.valueOf(id));
 
-				detailFragment.tvTimer.setText(Utility.getTime(time));
-
 		mBuilder = new NotificationCompat.Builder(this);
 		mBuilder.setContentTitle("CookAdvisor")
 				.setSmallIcon(Utility.getIconResourceForTitle(timerName))
@@ -102,10 +95,13 @@ public class TimerService extends Service {
 
 				int timeUntilFinish = (int) millisUntilFinished/1000;
 
-				if (titles[tickId].equals(detailFragment.tvTitle.getText().toString())) {
-					detailFragment.tvTimer.setText(Utility.getTime(timeUntilFinish));
-					detailFragment.btnStart.setText(getString(R.string.reset_time));
-				}
+				Utility.setItemCurrentTime(titles[tickId], timeUntilFinish);
+
+				Intent intent = new Intent(Utility.BROADCAST_ACTION).putExtra(Utility.TITLE, titles[tickId])
+						.putExtra(Utility.TIME_UNTIL_FINISH, timeUntilFinish)
+						.putExtra(Utility.TIME, time)
+						.putExtra(Utility.ADVICE, advice);
+				sendBroadcast(intent);
 
 				BitmapFactory.Options options = new BitmapFactory.Options();
 				options.inSampleSize = 2;
@@ -124,14 +120,27 @@ public class TimerService extends Service {
 				mBuilder.setProgress(maxTime, maxTime - inc, false)
 						.setContentIntent(contentIntent)
 						.setLargeIcon(icon)
+						.setVibrate(null)
 						.setSmallIcon(Utility.getIconResourceForTitle(titles[tickId]))
-						.setContentText(titles[tickId] + " in progress - " + Utility.getTime(timeUntilFinish));
+						.setContentText(titles[tickId] + " " + getApplicationContext().getResources().getString(R.string.is_preparing) + " - " + Utility.getTime(timeUntilFinish));
 
 				mNotifyManager.notify(titles[tickId], tickId, mBuilder.build());
 			}
 
 			@Override
 			public void onFinish() {
+
+				Utility.setItemCurrentTime(titles[tickId], 0);
+
+				mediaPlayer = new  MediaPlayer();
+				mediaPlayer = MediaPlayer.create(getBaseContext(), R.raw.done);
+				mediaPlayer.start();
+
+				Intent intent = new Intent(Utility.BROADCAST_ACTION).putExtra(Utility.TITLE, titles[tickId])
+						.putExtra(Utility.TIME_UNTIL_FINISH, 0)
+						.putExtra(Utility.TIME, time)
+						.putExtra(Utility.ADVICE, advice);
+				sendBroadcast(intent);
 
 				Intent activity = new Intent(TimerService.this, DetailActivity.class).putExtra(Utility.TITLE, titles[tickId])
 								.putExtra(Utility.TIME, 0)
@@ -145,7 +154,7 @@ public class TimerService extends Service {
 				options.inSampleSize = 2;
 				Bitmap icon = BitmapFactory.decodeResource(getResources(), Utility.getIconResourceForTitle(titles[tickId]), options);
 
-				mBuilder.setContentText(titles[tickId] + " Done!")
+				mBuilder.setContentText(titles[tickId] + " " + getApplicationContext().getResources().getString(R.string.done))
 						.setContentIntent(contentIntent)
 						.setLargeIcon(icon)
 						.setSmallIcon(Utility.getIconResourceForTitle(titles[tickId]))
@@ -153,15 +162,10 @@ public class TimerService extends Service {
 						.setProgress(0, 0, false);
 				mNotifyManager.notify(titles[tickId], tickId, mBuilder.build());
 
-				if (titles[tickId].equals(detailFragment.tvTitle.getText().toString())) {
-					detailFragment.tvTimer.setText(getString(R.string.done));
-					detailFragment.btnStart.setText(getString(R.string.start));
-				}
-				mediaPlayer = new  MediaPlayer();
-				mediaPlayer = MediaPlayer.create(getBaseContext(), R.raw.done);
-				mediaPlayer.start();
 				Utility.id--;
 				Log.d(LOG_TAG, "id -- = " + Utility.id);
+
+				Utility.removeCurrentTimer(titles[tickId]);
 			}
 		};
 

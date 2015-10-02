@@ -1,7 +1,10 @@
 package com.vasiachess.cookadvisor;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,12 +12,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.vasiachess.cookadvisor.data.AdviceContract;
 
@@ -25,10 +30,10 @@ import com.vasiachess.cookadvisor.data.AdviceContract;
 public class MainFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
     private AdviceAdapter mAdviceAdapter;
-    public static final String LOG_TAG = MainFragment.class.getSimpleName();
+    public static final String LOG_TAG = "MyLog: " + MainFragment.class.getSimpleName();
     private ListView mListView;
     private Button btnAdd;
-
+    private BroadcastReceiver br;
     private int mPosition = ListView.INVALID_POSITION;
 
     private static final int ADVICE_LOADER = 0;
@@ -88,12 +93,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             intent.putExtra(Utility.ADVICE, "");
             startActivity(intent);
         }
-
-
-
     }
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -126,7 +126,24 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         });
 
+        br = new BroadcastReceiver() {
+
+            public void onReceive(Context context, Intent intent) {
+	            mAdviceAdapter.notifyDataSetChanged();
+            }
+        };
+
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // create filter for BroadcastReceiver
+        IntentFilter intFilt = new IntentFilter(Utility.BROADCAST_ACTION);
+        // register BroadcastReceiver
+        getActivity().registerReceiver(br, intFilt);
     }
 
     @Override
@@ -170,4 +187,12 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
         mAdviceAdapter.swapCursor(null);
     }
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		getActivity().unregisterReceiver(br);
+	}
+
+
 }

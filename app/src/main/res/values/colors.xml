@@ -6,10 +6,14 @@
     <color name="bg_et_distance">#99ffffff</color>
     <color name="bg_dark">#047d83</color>
     <color name="bg_light">#0599a0</color>
+    <color name="bg_yellow">#81ffdc38</color>
+    <color name="bg_white">#ededed</color>
+    <color name="bg_grey">#d7d7d7</color>
     <color name="et_distance">#000</color>
     <color name="bg_button">#ffdc38</color>
     <color name="bg_btn_start">#ffdc38</color>
     <color name="bg_btn_center">#edaa23</color>
+    <color name="text_run_timer">#f8f47821</color>
     <color name="bg_btn_end">#ffdc38</color>
 
 </resources>

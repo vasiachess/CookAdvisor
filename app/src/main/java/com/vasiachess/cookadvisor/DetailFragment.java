@@ -2,9 +2,12 @@ package com.vasiachess.cookadvisor;
 
 import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -20,8 +23,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.vasiachess.cookadvisor.data.AdviceContract;
 
 /**
@@ -32,17 +37,18 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
     public static Button btnStart;
     private Button btnEdit;
     private Button btnDelete;
-    public static TextView tvTitle;
+    private NumberProgressBar progressBar;
+	private TextView tvTitle;
     public ImageView ivIcon;
-    public static TextView tvTimer;
+	private TextView tvTimer;
     private TextView tvAdvice;
     private final String BUTTON_KEY = "button_state";
-    public static String title = "";
-    private String advice = "";
+	private String mTitle = "";
+    private String mAdvice = "";
     private ShareActionProvider mShareActionProvider;
-    private String mAdvice;
+    private String mShareAdvice;
     private PendingIntent pIntent;
-
+    private BroadcastReceiver br;
     boolean bound = false;
     ServiceConnection sConn;
     TimerService timerService;
@@ -68,6 +74,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
         btnStart = (Button) rootView.findViewById(R.id.buttonStart);
         btnEdit = (Button) rootView.findViewById(R.id.buttonEdit);
         btnDelete = (Button) rootView.findViewById(R.id.buttonDelete);
+	    progressBar = (NumberProgressBar) rootView.findViewById(R.id.progressBar);
 
         tvTitle = (TextView) rootView.findViewById(R.id.textViewTitle);
         ivIcon = (ImageView) rootView.findViewById(R.id.imageViewIcon);
@@ -76,20 +83,23 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
 
         Bundle arguments = getArguments();
         if (arguments != null) {
-            title = arguments.getString(Utility.TITLE);
-            tvTitle.setText(title);
+	        btnEdit.setEnabled(true);
+	        btnDelete.setEnabled(true);
+	        btnStart.setEnabled(true);
 
-            ivIcon.setImageResource(Utility.getIconResourceForTitle(title));
+	        mTitle = arguments.getString(Utility.TITLE);
+	        advTime = arguments.getInt(Utility.TIME);
 
-            advTime = arguments.getInt(Utility.TIME);
-            setTimer();
-
-            advice = arguments.getString(Utility.ADVICE);
-            tvAdvice.setText(advice);
-
-            btnEdit.setEnabled(true);
-            btnDelete.setEnabled(true);
-            btnStart.setEnabled(true);
+	        int time;
+	        if (Utility.timers.containsKey(mTitle)) {
+		        time = Utility.timers.get(mTitle);
+		        btnStart.setText(getString(R.string.reset_time));
+		        setProgressBar(advTime, time);
+	        } else {
+		        time = advTime;
+	        }
+	        mAdvice = arguments.getString(Utility.ADVICE);
+	        setTimer(mTitle, time, mAdvice);
         }
 
         if (savedInstanceState != null && savedInstanceState.containsKey(BUTTON_KEY)) {
@@ -123,8 +133,44 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
 		    getActivity().startService(intent);
 	    }
 
+        br = new BroadcastReceiver() {
+
+            public void onReceive(Context context, Intent intent) {
+                String title = intent.getStringExtra(Utility.TITLE);
+                int time = intent.getIntExtra(Utility.TIME, 0);
+                int timeUntilFinish = intent.getIntExtra(Utility.TIME_UNTIL_FINISH, 0);
+
+	            if (title.equals(tvTitle.getText().toString())) {
+
+		            setProgressBar(time, timeUntilFinish);
+
+                    if (timeUntilFinish == 0) {
+                        tvTimer.setText(getString(R.string.done));
+                        btnStart.setText(getString(R.string.start));
+                    } else {
+                        tvTimer.setText(Utility.getTime(timeUntilFinish));
+                        btnStart.setText(getString(R.string.reset_time));
+                    }
+	            }
+            }
+        };
         return rootView;
     }
+
+	@Override
+	public void onResume() {
+		super.onResume();
+        // create filter for BroadcastReceiver
+		IntentFilter intFilt = new IntentFilter(Utility.BROADCAST_ACTION);
+        // register BroadcastReceiver
+		getActivity().registerReceiver(br, intFilt);
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		getActivity().unregisterReceiver(br);
+	}
 
 	@Override
 	public void onDestroyView() {
@@ -151,19 +197,19 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
     private void onClickDelete() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Delete " + title + "?");
+        builder.setMessage(getActivity().getResources().getString(R.string.Delete) + mTitle + "?");
         builder.setCancelable(false);
-        builder.setPositiveButton("Delete",
+        builder.setPositiveButton(getActivity().getResources().getString(R.string.Delete),
                 new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog,
                                         int which) {
-                        int del = getActivity().getContentResolver().delete(AdviceContract.AdviceEntry.CONTENT_URI, "title = ? and time = ?", new String[]{title, String.valueOf(advTime)});
+                        int del = getActivity().getContentResolver().delete(AdviceContract.AdviceEntry.CONTENT_URI, "title = ? and time = ?", new String[]{mTitle, String.valueOf(advTime)});
                         Intent intent = new Intent(getActivity(), MainActivity.class);
                         startActivity(intent);
                     }
-                }).setNegativeButton("Cancel",
+                }).setNegativeButton(getActivity().getResources().getString(R.string.Cancel),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog,
@@ -179,15 +225,13 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
 
         if (btnStart.getText() == getString(R.string.start)) {
 	        btnStart.setText(getString(R.string.reset_time));
-
-	        timerService.startTimer(title, advTime, advice);
-
+	        timerService.startTimer(mTitle, advTime, mAdvice);
         } else {
             btnStart.setText(getString(R.string.start));
-
-            timerService.stopTimer(title);
-
-            setTimer();
+	        progressBar.setVisibility(View.INVISIBLE);
+            timerService.stopTimer(mTitle);
+	        Utility.removeCurrentTimer(mTitle);
+            setTimer(mTitle, advTime, mAdvice);
         }
     }
 
@@ -198,9 +242,9 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
             // fragment transaction.
             Bundle arguments = new Bundle();
 
-            arguments.putString(Utility.TITLE, title);
+            arguments.putString(Utility.TITLE, mTitle);
             arguments.putInt(Utility.TIME, advTime);
-            arguments.putString(Utility.ADVICE, advice);
+            arguments.putString(Utility.ADVICE, mAdvice);
 
             EditFragment fragment = new EditFragment();
             fragment.setArguments(arguments);
@@ -210,18 +254,18 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
                     .commit();
         } else {
             Intent intent = new Intent(getActivity(), EditActivity.class);
-            intent.putExtra(Utility.TITLE, title);
+            intent.putExtra(Utility.TITLE,mTitle);
             intent.putExtra(Utility.TIME, advTime);
-            intent.putExtra(Utility.ADVICE, advice);
+            intent.putExtra(Utility.ADVICE, mAdvice);
             startActivity(intent);
         }
 
 
     }
 
-    private void setTimer() {
+    private void setTimer(String title, int time, String advice) {
         tvTitle.setText(title);
-        tvTimer.setText(Utility.getTime(advTime));
+        tvTimer.setText(Utility.getTime(time));
         tvAdvice.setText(advice);
         ivIcon.setImageResource(Utility.getIconResourceForTitle(title));
     }
@@ -243,18 +287,25 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
 // Get the provider and hold onto it to set/change the share intent.
         mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
 
-        mAdvice = String.format("%s - %s - %s", tvTitle.getText(), Utility.getTime(advTime), tvAdvice.getText());
+        mShareAdvice = String.format("%s - %s - %s", tvTitle.getText(), Utility.getTime(advTime), tvAdvice.getText());
 
         mShareActionProvider.setShareIntent(createShareAdviceIntent());
     }
 
     private Intent createShareAdviceIntent() {
+
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, mAdvice + ADVICE_SHARE_HASHTAG);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, mShareAdvice + ADVICE_SHARE_HASHTAG);
         return shareIntent;
     }
+
+	private void setProgressBar(int maxTime, int currentTime) {
+		progressBar.setVisibility(View.VISIBLE);
+		progressBar.setMax(maxTime);
+		progressBar.setProgress(maxTime-currentTime);
+	}
 }
 
 

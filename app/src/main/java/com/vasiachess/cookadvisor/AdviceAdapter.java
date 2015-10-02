@@ -3,22 +3,28 @@ package com.vasiachess.cookadvisor;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.HashMap;
+
 /**
  * Created by Vasiliy on 19.03.2015.
  */
 public class AdviceAdapter extends CursorAdapter {
+
+    private Context mContext;
 
     public static class ViewHolder {
 
         public final ImageView iconView;
         public final TextView titleView;
         public final TextView timerView;
+        public final TextView progressView;
 
 
         public ViewHolder(View view) {
@@ -26,12 +32,14 @@ public class AdviceAdapter extends CursorAdapter {
             iconView = (ImageView) view.findViewById(R.id.list_item_icon);
             titleView = (TextView) view.findViewById(R.id.list_item_title_textview);
             timerView = (TextView) view.findViewById(R.id.list_item_timer_textview);
+            progressView = (TextView) view.findViewById(R.id.list_item_progress_textview);
 
         }
     }
 
     public AdviceAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
+        mContext = context;
     }
 
     @Override
@@ -49,13 +57,19 @@ public class AdviceAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
 
         ViewHolder viewHolder = (ViewHolder) view.getTag();
-
         String title = cursor.getString(MainFragment.COL_TITLE);
         viewHolder.titleView.setText(title);
-
         viewHolder.iconView.setImageResource(Utility.getIconResourceForTitle(title));
 
-        Integer timer = cursor.getInt(MainFragment.COL_TIME);
-        viewHolder.timerView.setText(Utility.getTime(timer));
+        if (Utility.timers.containsKey(title)) {
+            viewHolder.timerView.setText(Utility.getTime(Utility.timers.get(title)));
+            view.setBackgroundColor(mContext.getResources().getColor(R.color.bg_grey));
+            viewHolder.progressView.setVisibility(View.VISIBLE);
+        } else {
+	        Integer timer = cursor.getInt(MainFragment.COL_TIME);
+            viewHolder.timerView.setText(Utility.getTime(timer));
+            view.setBackgroundColor(mContext.getResources().getColor(R.color.bg_white));
+            viewHolder.progressView.setVisibility(View.GONE);
+        }
     }
 }
