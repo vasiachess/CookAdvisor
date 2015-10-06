@@ -1,7 +1,6 @@
 package com.vasiachess.cookadvisor;
 
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -14,6 +13,7 @@ import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,11 +22,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.vasiachess.cookadvisor.data.AdviceContract;
 
 /**
@@ -35,8 +37,8 @@ import com.vasiachess.cookadvisor.data.AdviceContract;
 public class DetailFragment extends Fragment implements View.OnClickListener {
 
     public static Button btnStart;
-    private Button btnEdit;
-    private Button btnDelete;
+    private ImageView btnEdit;
+    private ImageView btnDelete;
     private NumberProgressBar progressBar;
 	private TextView tvTitle;
     public ImageView ivIcon;
@@ -47,7 +49,6 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
     private String mAdvice = "";
     private ShareActionProvider mShareActionProvider;
     private String mShareAdvice;
-    private PendingIntent pIntent;
     private BroadcastReceiver br;
     boolean bound = false;
     ServiceConnection sConn;
@@ -72,14 +73,15 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
         btnStart = (Button) rootView.findViewById(R.id.buttonStart);
-        btnEdit = (Button) rootView.findViewById(R.id.buttonEdit);
-        btnDelete = (Button) rootView.findViewById(R.id.buttonDelete);
+        btnEdit = (ImageView) rootView.findViewById(R.id.buttonEdit);
+        btnDelete = (ImageView) rootView.findViewById(R.id.buttonDelete);
 	    progressBar = (NumberProgressBar) rootView.findViewById(R.id.progressBar);
 
         tvTitle = (TextView) rootView.findViewById(R.id.textViewTitle);
         ivIcon = (ImageView) rootView.findViewById(R.id.imageViewIcon);
         tvTimer = (TextView) rootView.findViewById(R.id.textViewTimer);
         tvAdvice = (TextView) rootView.findViewById(R.id.textViewAdvice);
+        AdView mAdView = (AdView) rootView.findViewById(R.id.adView);
 
         Bundle arguments = getArguments();
         if (arguments != null) {
@@ -154,6 +156,23 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
 	            }
             }
         };
+
+//        Don't use while testing
+//        AdRequest adRequest = new AdRequest.Builder().build();
+
+        final TelephonyManager tm =(TelephonyManager)getActivity().getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
+
+        String deviceid = tm.getDeviceId();
+	    Log.d("MyLog", "DeviceId: " + deviceid);
+
+        //    testing
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)  // All emulators
+                .addTestDevice("341BED1CDA3E2FC7")  // My test phone
+                .build();
+
+        mAdView.loadAd(adRequest);
+
         return rootView;
     }
 
@@ -197,7 +216,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
     private void onClickDelete() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(getActivity().getResources().getString(R.string.Delete) + mTitle + "?");
+        builder.setMessage(getActivity().getResources().getString(R.string.Delete) + " " + mTitle + "?");
         builder.setCancelable(false);
         builder.setPositiveButton(getActivity().getResources().getString(R.string.Delete),
                 new DialogInterface.OnClickListener() {
@@ -232,11 +251,12 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
             timerService.stopTimer(mTitle);
 	        Utility.removeCurrentTimer(mTitle);
             setTimer(mTitle, advTime, mAdvice);
+            MainFragment.adviceAdapter.notifyDataSetChanged();
         }
     }
 
     private void onClickEdit() {
-        if (MainActivity.mTwoPane) {
+        if (Utility.twoPane) {
             // In two-pane mode, show the edit view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
@@ -267,7 +287,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
         tvTitle.setText(title);
         tvTimer.setText(Utility.getTime(time));
         tvAdvice.setText(advice);
-        ivIcon.setImageResource(Utility.getIconResourceForTitle(title));
+        ivIcon.setImageResource(Utility.getIconResourceForTitle(getActivity(), title));
     }
     @Override
     public void onSaveInstanceState(Bundle outState) {

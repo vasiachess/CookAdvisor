@@ -1,6 +1,5 @@
 package com.vasiachess.cookadvisor;
 
-import android.annotation.TargetApi;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -9,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Binder;
-import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
@@ -83,7 +81,7 @@ public class TimerService extends Service {
 
 		mBuilder = new NotificationCompat.Builder(this);
 		mBuilder.setContentTitle("CookAdvisor")
-				.setSmallIcon(Utility.getIconResourceForTitle(timerName))
+				.setSmallIcon(Utility.getIconResourceForTitle(getApplicationContext(), timerName))
 				.setContentText(timerName + " in progress");
 
 		final int maxTime = time * 1000;
@@ -105,7 +103,7 @@ public class TimerService extends Service {
 
 				BitmapFactory.Options options = new BitmapFactory.Options();
 				options.inSampleSize = 2;
-				Bitmap icon = BitmapFactory.decodeResource(getResources(), Utility.getIconResourceForTitle(titles[tickId]), options);
+				Bitmap icon = BitmapFactory.decodeResource(getResources(), Utility.getIconResourceForTitle(getApplicationContext(), titles[tickId]), options);
 
 				Integer inc = (int) (long) millisUntilFinished;
 
@@ -121,7 +119,7 @@ public class TimerService extends Service {
 						.setContentIntent(contentIntent)
 						.setLargeIcon(icon)
 						.setVibrate(null)
-						.setSmallIcon(Utility.getIconResourceForTitle(titles[tickId]))
+						.setSmallIcon(Utility.getIconResourceForTitle(getApplicationContext(), titles[tickId]))
 						.setContentText(titles[tickId] + " " + getApplicationContext().getResources().getString(R.string.is_preparing) + " - " + Utility.getTime(timeUntilFinish));
 
 				mNotifyManager.notify(titles[tickId], tickId, mBuilder.build());
@@ -152,12 +150,12 @@ public class TimerService extends Service {
 
 				BitmapFactory.Options options = new BitmapFactory.Options();
 				options.inSampleSize = 2;
-				Bitmap icon = BitmapFactory.decodeResource(getResources(), Utility.getIconResourceForTitle(titles[tickId]), options);
+				Bitmap icon = BitmapFactory.decodeResource(getResources(), Utility.getIconResourceForTitle(getApplicationContext(), titles[tickId]), options);
 
 				mBuilder.setContentText(titles[tickId] + " " + getApplicationContext().getResources().getString(R.string.done))
 						.setContentIntent(contentIntent)
 						.setLargeIcon(icon)
-						.setSmallIcon(Utility.getIconResourceForTitle(titles[tickId]))
+						.setSmallIcon(Utility.getIconResourceForTitle(getApplicationContext(), titles[tickId]))
 						.setVibrate(new long[]{100, 1500})
 						.setProgress(0, 0, false);
 				mNotifyManager.notify(titles[tickId], tickId, mBuilder.build());

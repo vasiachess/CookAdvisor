@@ -131,7 +131,7 @@ public class EditFragment extends Fragment implements View.OnClickListener {
             Log.d(LOG_TAG, "updated - " + title);
         }
 
-            if (MainActivity.mTwoPane) {
+            if (Utility.twoPane) {
                 // In two-pane mode, show the detail view in this activity by
                 // adding or replacing the detail fragment using a
                 // fragment transaction.
@@ -147,6 +147,9 @@ public class EditFragment extends Fragment implements View.OnClickListener {
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.advice_detail_container, fragment, DETAILFRAGMENT_TAG)
                         .commit();
+
+                MainFragment.adviceAdapter.notifyDataSetChanged();
+
             } else {
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
                 intent.putExtra(Utility.TITLE, etTitle.getText().toString());

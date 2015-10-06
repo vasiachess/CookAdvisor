@@ -1,6 +1,8 @@
 package com.vasiachess.cookadvisor;
 
 
+import android.content.Context;
+
 import java.util.HashMap;
 
 /**
@@ -9,6 +11,7 @@ import java.util.HashMap;
 public class Utility {
 
    public static HashMap<String, Integer> timers = new HashMap<>();
+   public static boolean twoPane;
    public static int id = 0;
    public static final String TITLE = "title";
    public static final String TIME = "time";
@@ -16,15 +19,17 @@ public class Utility {
    public static final String ADVICE = "advice";
    public final static String BROADCAST_ACTION = "com.vasiachess.cookadvisor.timerservicebackbroadcast";
 
-   public static int getIconResourceForTitle(String title) {
+   public static int getIconResourceForTitle(Context ctx, String title) {
 
-        if (title.contains("Pasta")||title.contains("pasta")) {
+       title = title.toLowerCase();
+
+        if (title.contains(ctx.getResources().getString(R.string.pasta).toLowerCase())) {
             return R.drawable.pasta;
-        } else if (title.contains("Rice")||title.contains("rice")) {
+        } else if (title.contains(ctx.getResources().getString(R.string.rice).toLowerCase())) {
             return R.drawable.rice;
-        } else if (title.contains("Egg")||title.contains("egg")) {
+        } else if (title.contains(ctx.getResources().getString(R.string.egg).toLowerCase())) {
             return R.drawable.egg;
-        } else if (title.contains("Sausage")||title.contains("sausage")) {
+        } else if (title.contains(ctx.getResources().getString(R.string.sausage).toLowerCase())) {
             return R.drawable.sausage;
         }
             return R.drawable.default_icon;

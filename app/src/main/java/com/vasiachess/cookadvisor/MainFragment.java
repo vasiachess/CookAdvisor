@@ -12,14 +12,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.vasiachess.cookadvisor.data.AdviceContract;
 
@@ -29,7 +27,7 @@ import com.vasiachess.cookadvisor.data.AdviceContract;
 
 public class MainFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
-    private AdviceAdapter mAdviceAdapter;
+    public static AdviceAdapter adviceAdapter;
     public static final String LOG_TAG = "MyLog: " + MainFragment.class.getSimpleName();
     private ListView mListView;
     private Button btnAdd;
@@ -70,7 +68,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
     private void onClickAdd() {
 
-        if (MainActivity.mTwoPane) {
+        if (Utility.twoPane) {
             // In two-pane mode, show the edit view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
@@ -100,12 +98,12 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        mAdviceAdapter = new AdviceAdapter(getActivity(), null, 0);
+        adviceAdapter = new AdviceAdapter(getActivity(), null, 0);
 
 // Get a reference to the ListView, and attach this adapter to it.
         mListView = (ListView) rootView.findViewById(R.id.listViewAdvices);
         btnAdd = (Button) rootView.findViewById(R.id.buttonAdd);
-        mListView.setAdapter(mAdviceAdapter);
+        mListView.setAdapter(adviceAdapter);
 
         btnAdd.setOnClickListener(this);
 
@@ -129,7 +127,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         br = new BroadcastReceiver() {
 
             public void onReceive(Context context, Intent intent) {
-	            mAdviceAdapter.notifyDataSetChanged();
+	            adviceAdapter.notifyDataSetChanged();
             }
         };
 
@@ -174,7 +172,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
 
-        mAdviceAdapter.swapCursor(cursor);
+        adviceAdapter.swapCursor(cursor);
 
         if (mPosition != ListView.INVALID_POSITION) {
             // If we don't need to restart the loader, and there's a desired position to restore
@@ -185,7 +183,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
-        mAdviceAdapter.swapCursor(null);
+        adviceAdapter.swapCursor(null);
     }
 
 	@Override

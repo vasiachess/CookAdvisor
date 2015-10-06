@@ -3,14 +3,11 @@ package com.vasiachess.cookadvisor;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.util.HashMap;
 
 /**
  * Created by Vasiliy on 19.03.2015.
@@ -59,7 +56,7 @@ public class AdviceAdapter extends CursorAdapter {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
         String title = cursor.getString(MainFragment.COL_TITLE);
         viewHolder.titleView.setText(title);
-        viewHolder.iconView.setImageResource(Utility.getIconResourceForTitle(title));
+        viewHolder.iconView.setImageResource(Utility.getIconResourceForTitle(context, title));
 
         if (Utility.timers.containsKey(title)) {
             viewHolder.timerView.setText(Utility.getTime(Utility.timers.get(title)));

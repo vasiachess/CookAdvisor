@@ -17,7 +17,6 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String PREFS_NAME = "first_start";
     final String IS_FIRST_START = "IsFS";
-    public static boolean mTwoPane;
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
 
     @Override
@@ -30,12 +29,15 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
         Log.d(LOG_TAG, " OnCreate " );
 
         if (isFirstStart) {
-            String[] mTitle = { "Pasta", "Egg", "Sausage", "White Rice" };
+            String[] mTitle = { getResources().getString(R.string.pasta),
+                    getResources().getString(R.string.egg),
+                    getResources().getString(R.string.sausage),
+                    getResources().getString(R.string.white_rice) };
             Integer[] mTime = { 600, 180, 120, 900 };
-            String[] mAdvice = { "Put pasta in the warm water. Add some oil and salt. Pasta will be delicious!",
-                    "Put egg in the warm water. When egg is done, put it in cold water. Then it will be easy to clean from the shell",
-                    "Put sausage in the warm water. When sausage is done, put it in cold water for a second.",
-                    "The ratio of water to rice is 2 to 1. Put rice in the cold water."  };
+            String[] mAdvice = { getResources().getString(R.string.advice_pasta),
+                    getResources().getString(R.string.advice_egg),
+                    getResources().getString(R.string.advice_sausage),
+                    getResources().getString(R.string.advice_rice) };
 
             ContentValues adviceValues = new ContentValues();
 
@@ -64,7 +66,7 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
                 // The detail container view will be present only in the large-screen layouts
                 // (res/layout-sw600dp). If this view is present, then the activity should be
                 // in two-pane mode.
-                mTwoPane = true;
+                Utility.twoPane = true;
                 // In two-pane mode, show the detail view in this activity by
                 // adding or replacing the detail fragment using a
                 // fragment transaction.
@@ -74,7 +76,7 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
                             .commit();
                 }
             } else {
-                mTwoPane = false;
+                Utility.twoPane = false;
                 getSupportActionBar().setElevation(0f);
             }
 
@@ -84,7 +86,7 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
     @Override
     public void onItemSelected(String title, Integer time, String advice) {
 
-        if (mTwoPane) {
+        if (Utility.twoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.

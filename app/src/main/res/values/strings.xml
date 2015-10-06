@@ -25,4 +25,16 @@
     <string name="Cancel">Cancel</string>
     <string name="done">Done!</string>
     <string name="is_preparing">is preparing</string>
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+
+    <string name="pasta">Pasta</string>
+    <string name="egg">Egg</string>
+    <string name="sausage">Sausage</string>
+    <string name="rice">rice</string>
+    <string name="white_rice">White rice</string>
+    <string name="advice_egg">Put egg in the warm water. When egg is done, put it in cold water. Then it will be easy to clean from the shell</string>
+    <string name="advice_pasta">Put pasta in the warm water. Add some oil and salt. Pasta will be delicious!</string>
+    <string name="advice_sausage">Put sausage in the warm water. When sausage is done, put it in cold water for a second.</string>
+    <string name="advice_rice">The ratio of water to rice is 2 to 1. Put rice in the cold water.</string>
+
 </resources>

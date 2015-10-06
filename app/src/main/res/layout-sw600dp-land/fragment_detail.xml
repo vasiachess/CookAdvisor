@@ -88,30 +88,30 @@
         android:layout_marginTop="10dp"
         android:textColor="@android:color/black" />
 
-	<ImageView
-		android:layout_width="25dp"
-		android:layout_height="25dp"
-		android:layout_marginTop="10dp"
-		android:src="@drawable/edit"
-		android:scaleType="fitCenter"
-		android:id="@+id/buttonEdit"
-		android:enabled="false"
-		android:layout_alignBottom="@+id/textViewLabel"
-		android:layout_marginRight="15dp"
-		android:layout_toLeftOf="@+id/buttonDelete"/>
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/edit"
+        android:scaleType="fitCenter"
+        android:id="@+id/buttonEdit"
+        android:enabled="false"
+        android:layout_alignBottom="@+id/textViewLabel"
+        android:layout_marginRight="15dp"
+        android:layout_toLeftOf="@+id/buttonDelete"/>
 
-	<ImageView
-		android:layout_width="25dp"
-		android:layout_height="25dp"
-		android:layout_marginTop="10dp"
-		android:src="@drawable/delete"
-		android:scaleType="fitCenter"
-		android:id="@+id/buttonDelete"
-		android:enabled="false"
-		android:layout_alignBottom="@+id/textViewLabel"
-		android:layout_marginBottom="3dp"
-		android:layout_alignParentRight="true"
-		android:layout_marginRight="10dp"/>
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/delete"
+        android:scaleType="fitCenter"
+        android:id="@+id/buttonDelete"
+        android:enabled="false"
+        android:layout_alignBottom="@+id/textViewLabel"
+        android:layout_marginBottom="3dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -119,8 +119,10 @@
         android:id="@+id/scrollView"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/textViewLabel"
-        android:layout_above="@+id/adView"
-        android:layout_margin="10dp">
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_above="@+id/adView">
 
         <TextView
             android:layout_width="match_parent"
