@@ -29,6 +29,8 @@ import android.widget.TextView;
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.vasiachess.cookadvisor.data.AdviceContract;
 
 /**
@@ -53,6 +55,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
     boolean bound = false;
     ServiceConnection sConn;
     TimerService timerService;
+    private Tracker mTracker;
 
     public static int advTime = 0;
     private final String LOG_TAG = "MyLog: " + DetailFragment.class.getSimpleName();
@@ -63,6 +66,15 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
 
     public DetailFragment() {
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Obtain the shared Tracker instance.
+        Application application = (Application) getActivity().getApplication();
+        mTracker = application.getDefaultTracker();
     }
 
     @Override
@@ -183,6 +195,10 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
 		IntentFilter intFilt = new IntentFilter(Utility.BROADCAST_ACTION);
         // register BroadcastReceiver
 		getActivity().registerReceiver(br, intFilt);
+
+        Log.i("GoogleAnalytics", "Setting screen name: " + getClass().getName());
+        mTracker.setScreenName("Image~" + getClass().getName());
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 	}
 
 	@Override
@@ -214,6 +230,11 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
     }
 
     private void onClickDelete() {
+
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Action")
+                .setAction("Delete Advice")
+                .build());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(getActivity().getResources().getString(R.string.Delete) + " " + mTitle + "?");
@@ -253,9 +274,20 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
             setTimer(mTitle, advTime, mAdvice);
             MainFragment.adviceAdapter.notifyDataSetChanged();
         }
+
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Action")
+                .setAction("Start timer")
+                .build());
     }
 
     private void onClickEdit() {
+
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Action")
+                .setAction("Edit advice")
+                .build());
+
         if (Utility.twoPane) {
             // In two-pane mode, show the edit view in this activity by
             // adding or replacing the detail fragment using a
@@ -279,8 +311,6 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
             intent.putExtra(Utility.ADVICE, mAdvice);
             startActivity(intent);
         }
-
-
     }
 
     private void setTimer(String title, int time, String advice) {
@@ -313,6 +343,11 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
     }
 
     private Intent createShareAdviceIntent() {
+
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Action")
+                .setAction("Share Advice")
+                .build());
 
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);

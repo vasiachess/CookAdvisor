@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.vasiachess.cookadvisor.data.AdviceContract;
 
 /**
@@ -33,6 +36,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     private Button btnAdd;
     private BroadcastReceiver br;
     private int mPosition = ListView.INVALID_POSITION;
+    private Tracker mTracker;
 
     private static final int ADVICE_LOADER = 0;
 
@@ -57,6 +61,15 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     public MainFragment() {
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Obtain the shared Tracker instance.
+        Application application = (Application) getActivity().getApplication();
+        mTracker = application.getDefaultTracker();
     }
 
     @Override
@@ -91,6 +104,11 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             intent.putExtra(Utility.ADVICE, "");
             startActivity(intent);
         }
+
+	    mTracker.send(new HitBuilders.EventBuilder()
+			    .setCategory("Action")
+			    .setAction("Add new advice")
+			    .build());
     }
 
     @Override
@@ -137,11 +155,14 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public void onResume() {
         super.onResume();
-
         // create filter for BroadcastReceiver
         IntentFilter intFilt = new IntentFilter(Utility.BROADCAST_ACTION);
         // register BroadcastReceiver
         getActivity().registerReceiver(br, intFilt);
+
+        Log.i("GoogleAnalytics", "Setting screen name: " + getClass().getName());
+        mTracker.setScreenName("Image~" + getClass().getName());
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override

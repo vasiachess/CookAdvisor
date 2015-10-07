@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.vasiachess.cookadvisor.data.AdviceContract;
 
 
@@ -79,8 +81,6 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
                 Utility.twoPane = false;
                 getSupportActionBar().setElevation(0f);
             }
-
-
     }
 
     @Override

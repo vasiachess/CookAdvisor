@@ -1,6 +1,7 @@
 package com.vasiachess.cookadvisor;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
@@ -30,7 +31,6 @@ public class AdviceAdapter extends CursorAdapter {
             titleView = (TextView) view.findViewById(R.id.list_item_title_textview);
             timerView = (TextView) view.findViewById(R.id.list_item_timer_textview);
             progressView = (TextView) view.findViewById(R.id.list_item_progress_textview);
-
         }
     }
 
