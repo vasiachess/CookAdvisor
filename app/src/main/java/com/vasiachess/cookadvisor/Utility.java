@@ -31,6 +31,26 @@ public class Utility {
             return R.drawable.egg;
         } else if (title.contains(ctx.getResources().getString(R.string.sausage).toLowerCase())) {
             return R.drawable.sausage;
+        } else if (title.contains(ctx.getResources().getString(R.string.corn).toLowerCase())) {
+            return R.drawable.corn;
+        } else if (title.contains(ctx.getResources().getString(R.string.potato).toLowerCase())) {
+            return R.drawable.potato;
+        } else if (title.contains(ctx.getResources().getString(R.string.carrot).toLowerCase())) {
+            return R.drawable.carrot;
+        } else if (title.contains(ctx.getResources().getString(R.string.chicken).toLowerCase())) {
+            return R.drawable.chicken;
+        } else if (title.contains(ctx.getResources().getString(R.string.fish).toLowerCase())) {
+            return R.drawable.fish;
+        } else if (title.contains(ctx.getResources().getString(R.string.oat).toLowerCase())) {
+            return R.drawable.porridge;
+        } else if (title.contains(ctx.getResources().getString(R.string.peas).toLowerCase())) {
+            return R.drawable.peas;
+        } else if (title.contains(ctx.getResources().getString(R.string.beans).toLowerCase())) {
+            return R.drawable.beans;
+        } else if (title.contains(ctx.getResources().getString(R.string.beet).toLowerCase())) {
+            return R.drawable.beet;
+        } else if (title.contains(ctx.getResources().getString(R.string.buckwheat).toLowerCase())) {
+            return R.drawable.buckwheat;
         }
             return R.drawable.default_icon;
    }

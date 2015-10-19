@@ -32,14 +32,46 @@ public class MainActivity extends ActionBarActivity implements MainFragment.Call
 
         if (isFirstStart) {
             String[] mTitle = { getResources().getString(R.string.pasta),
-                    getResources().getString(R.string.egg),
+                    getResources().getString(R.string.egg_soft),
+                    getResources().getString(R.string.egg_medium),
+                    getResources().getString(R.string.egg_hard),
                     getResources().getString(R.string.sausage),
-                    getResources().getString(R.string.white_rice) };
-            Integer[] mTime = { 600, 180, 120, 900 };
+                    getResources().getString(R.string.brown_rice),
+                    getResources().getString(R.string.white_rice),
+                    getResources().getString(R.string.corn),
+                    getResources().getString(R.string.potato),
+                    getResources().getString(R.string.carrot),
+                    getResources().getString(R.string.chicken_breasts),
+                    getResources().getString(R.string.fish),
+                    getResources().getString(R.string.porridge),
+                    getResources().getString(R.string.rolled_oats),
+                    getResources().getString(R.string.peas_fresh),
+                    getResources().getString(R.string.peas_dried),
+                    getResources().getString(R.string.dried_beans),
+                    getResources().getString(R.string.beet),
+                    getResources().getString(R.string.buckwheat)
+            };
+            Integer[] mTime = { 600, 180, 300, 600, 120, 1800, 900, 900, 1200, 1200, 1800, 600, 1800, 300, 180, 3600, 3600, 2700, 1200 };
             String[] mAdvice = { getResources().getString(R.string.advice_pasta),
-                    getResources().getString(R.string.advice_egg),
+                    getResources().getString(R.string.advice_egg_soft),
+                    getResources().getString(R.string.advice_egg_medium),
+                    getResources().getString(R.string.advice_egg_hard),
                     getResources().getString(R.string.advice_sausage),
-                    getResources().getString(R.string.advice_rice) };
+                    getResources().getString(R.string.advice_rice),
+                    getResources().getString(R.string.advice_rice),
+                    getResources().getString(R.string.advice_corn),
+                    getResources().getString(R.string.advice_potato),
+                    getResources().getString(R.string.advice_carrot),
+                    getResources().getString(R.string.advice_chicken),
+                    getResources().getString(R.string.advice_fish),
+                    getResources().getString(R.string.advice_porridge),
+                    getResources().getString(R.string.advice_rolled_oats),
+                    getResources().getString(R.string.advice_peas_fresh),
+                    getResources().getString(R.string.advice_peas_dried),
+                    getResources().getString(R.string.advice_beans),
+                    getResources().getString(R.string.advice_beet),
+                    getResources().getString(R.string.advice_buckwheat)
+            };
 
             ContentValues adviceValues = new ContentValues();
 

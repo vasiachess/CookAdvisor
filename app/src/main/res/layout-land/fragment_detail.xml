@@ -10,7 +10,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin">
+    android:paddingBottom="5dp">
 
   <RelativeLayout
     android:layout_width="match_parent"
@@ -95,32 +95,30 @@
         android:id="@+id/textViewLabel"
         android:textColor="@android:color/black"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="7dp"/>
 
       <ImageView
           android:layout_width="25dp"
           android:layout_height="25dp"
-          android:layout_marginTop="10dp"
+          android:layout_marginTop="7dp"
           android:src="@drawable/edit"
           android:scaleType="fitCenter"
           android:id="@+id/buttonEdit"
           android:enabled="false"
-          android:layout_alignBottom="@+id/textViewLabel"
           android:layout_marginRight="10dp"
           android:layout_toLeftOf="@+id/buttonDelete"/>
 
       <ImageView
           android:layout_width="25dp"
           android:layout_height="25dp"
-          android:layout_marginTop="10dp"
+          android:layout_marginTop="4dp"
           android:src="@drawable/delete"
           android:scaleType="fitCenter"
           android:id="@+id/buttonDelete"
           android:enabled="false"
-          android:layout_alignBottom="@+id/textViewLabel"
-          android:layout_marginBottom="3dp"
+          android:layout_marginBottom="0dp"
           android:layout_alignParentRight="true"
-          android:layout_marginRight="20dp"/>
+          android:layout_marginRight="15dp"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -130,9 +128,9 @@
         android:layout_below="@+id/textViewLabel"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="26dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="5dp"
         android:layout_above="@+id/adView"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="5dp">
 
         <TextView
             android:layout_width="match_parent"
