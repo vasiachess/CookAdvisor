@@ -46,7 +46,6 @@ public class TimerService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        Log.d(LOG_TAG, "MyService onBind");
         return binder;
     }
 
@@ -65,19 +64,15 @@ public class TimerService extends Service {
 
 	public void stopTimer(String timerName) {
 		currentId = timerIds.get(timerName);
-		Log.d(LOG_TAG, "stopTimer id = " + String.valueOf(currentId));
 		countDownTimers.get(currentId).cancel();
 		mNotifyManager.cancel(timerName, currentId);
 		Utility.id--;
-		Log.d(LOG_TAG, "id -- = " + Utility.id);
 	}
 
 	public void startTimer(String timerName, final int time, final String advice) {
 		Utility.id++;
-		Log.d(LOG_TAG, "id ++ = " + Utility.id);
 		titles[id] = timerName;
 		timerIds.put(timerName, id);
-		Log.d(LOG_TAG, "startTimer " + titles[id] + " id = " + String.valueOf(id));
 
 		mBuilder = new NotificationCompat.Builder(this);
 		mBuilder.setContentTitle("CookAdvisor")
@@ -161,8 +156,6 @@ public class TimerService extends Service {
 				mNotifyManager.notify(titles[tickId], tickId, mBuilder.build());
 
 				Utility.id--;
-				Log.d(LOG_TAG, "id -- = " + Utility.id);
-
 				Utility.removeCurrentTimer(titles[tickId]);
 			}
 		};

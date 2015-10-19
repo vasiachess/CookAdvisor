@@ -22,7 +22,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -210,9 +209,8 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-
-		if (Utility.id == 0) {
-			Log.d(LOG_TAG, "Stop service id = " + Utility.id);
+        getActivity().unbindService(sConn);
+        if (Utility.id == 0) {
 			Intent intent = new Intent(getActivity(), TimerService.class);
 			getActivity().stopService(intent);
 		}
