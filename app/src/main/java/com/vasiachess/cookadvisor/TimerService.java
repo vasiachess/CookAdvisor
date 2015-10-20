@@ -1,8 +1,10 @@
 package com.vasiachess.cookadvisor;
 
+import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +14,8 @@ import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import com.vasiachess.cookadvisor.data.AdviceContract;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -147,7 +151,7 @@ public class TimerService extends Service {
 				options.inSampleSize = 2;
 				Bitmap icon = BitmapFactory.decodeResource(getResources(), Utility.getIconResourceForTitle(getApplicationContext(), titles[tickId]), options);
 
-				mBuilder.setContentText(titles[tickId] + " " + getApplicationContext().getResources().getString(R.string.done))
+				mBuilder.setContentText(titles[tickId] + " - " + getApplicationContext().getResources().getString(R.string.done))
 						.setContentIntent(contentIntent)
 						.setLargeIcon(icon)
 						.setSmallIcon(Utility.getIconResourceForTitle(getApplicationContext(), titles[tickId]))

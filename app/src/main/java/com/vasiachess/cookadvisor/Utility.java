@@ -17,6 +17,7 @@ public class Utility {
    public static final String TIME = "time";
    public static final String TIME_UNTIL_FINISH = "time_until_finish";
    public static final String ADVICE = "advice";
+   public static final String APPLICATION_ID = "56179c3027c1bf2200000000";
    public final static String BROADCAST_ACTION = "com.vasiachess.cookadvisor.timerservicebackbroadcast";
 
    public static int getIconResourceForTitle(Context ctx, String title) {

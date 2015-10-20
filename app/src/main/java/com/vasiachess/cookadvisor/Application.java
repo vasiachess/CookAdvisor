@@ -2,11 +2,22 @@ package com.vasiachess.cookadvisor;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
+
+import java.util.Locale;
+
 /**
  * Created by root on 07.10.15.
  */
 public class Application extends android.app.Application{
 	private Tracker mTracker;
+	public static String sDefSystemLanguage;
+
+	@Override
+	public void onCreate() {
+		super.onCreate();
+
+		sDefSystemLanguage = Locale.getDefault().getLanguage();
+	}
 
 	/**
 	 * Gets the default {@link Tracker} for this {@link Application}.

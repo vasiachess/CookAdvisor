@@ -42,10 +42,9 @@
         android:inputType="time"
         android:textSize="40dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/textViewTitle"
         android:layout_toRightOf="@+id/imageViewIcon"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp" />
+        android:layout_marginLeft="20dp"
+        android:layout_alignBottom="@+id/imageViewIcon"/>
 
 
     <Button
@@ -124,12 +123,25 @@
         android:layout_marginBottom="5dp"
         >
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/no_advices"
-            style="@style/TextViewMain"
-            android:id="@+id/textViewAdvice" />
+	    <LinearLayout
+		    android:orientation="vertical"
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent">
+
+		    <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/no_advices"
+                style="@style/TextViewMain"
+                android:id="@+id/textViewAdvice" />
+
+            <LinearLayout
+	            android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/startAdLayout"/>
+
+	    </LinearLayout>
     </ScrollView>
 
     <com.google.android.gms.ads.AdView

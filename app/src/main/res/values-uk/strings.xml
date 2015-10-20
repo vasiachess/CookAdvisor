@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">CookAdvisor</string>
-	<string name="Cancel">Відмінити</string>
+	<string name="Cancel">Відміна</string>
 	<string name="Delete">Видалити</string>
 	<string name="add">Додати</string>
 	<string name="advice_label">Порада</string>

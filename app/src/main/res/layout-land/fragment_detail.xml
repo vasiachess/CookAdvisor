@@ -46,10 +46,9 @@
         android:inputType="time"
         android:textSize="32dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/textViewTitle"
         android:layout_toRightOf="@+id/imageViewIcon"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="10dp" />
+        android:layout_marginLeft="10dp"
+        android:layout_alignBottom="@+id/imageViewIcon"/>
 
 
     <Button
@@ -79,6 +78,13 @@
 		android:layout_marginTop="15dp"
 		android:visibility="invisible"
 		/>
+
+      <LinearLayout
+          android:orientation="vertical"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:id="@+id/startAdLayout"
+          android:layout_alignParentBottom="true"/>
 
   </RelativeLayout>
 

@@ -45,6 +45,7 @@
     <string name="porridge">Oatmeal (porridge)</string>
     <string name="rolled_oats">Oat Flakes (Rolled Oats)</string>
     <string name="oat">oat</string>
+    <string name="ok" translatable="false">OK</string>
     <string name="peas">peas</string>
     <string name="peas_fresh">Peas fresh</string>
     <string name="peas_dried">Peas dried</string>

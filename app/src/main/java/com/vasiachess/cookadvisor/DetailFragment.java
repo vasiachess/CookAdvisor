@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
@@ -31,6 +32,7 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.vasiachess.cookadvisor.data.AdviceContract;
+import com.startad.lib.SADView;
 
 /**
  * Created by vasiliy on 16.03.2015.
@@ -55,6 +57,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
     ServiceConnection sConn;
     TimerService timerService;
     private Tracker mTracker;
+	protected SADView sadView;
 
     public static int advTime = 0;
     private final String LOG_TAG = "MyLog: " + DetailFragment.class.getSimpleName();
@@ -74,6 +77,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
         // Obtain the shared Tracker instance.
         Application application = (Application) getActivity().getApplication();
         mTracker = application.getDefaultTracker();
+
     }
 
     @Override
@@ -158,8 +162,24 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
 		            setProgressBar(time, timeUntilFinish);
 
                     if (timeUntilFinish == 0) {
-                        tvTimer.setText(getString(R.string.done));
+	                    setTimer(mTitle, advTime, mAdvice);
                         btnStart.setText(getString(R.string.start));
+
+	                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+	                    builder.setMessage(mTitle + " - " + getActivity().getResources().getString(R.string.done));
+	                    builder.setCancelable(false);
+	                    builder.setPositiveButton(getActivity().getResources().getString(R.string.ok),
+			                    new DialogInterface.OnClickListener() {
+
+				                    @Override
+				                    public void onClick(DialogInterface dialog,
+				                                        int which) {
+					                    dialog.cancel();
+				                    }
+			                    });
+
+	                    builder.show();
+
                     } else {
                         tvTimer.setText(Utility.getTime(timeUntilFinish));
                         btnStart.setText(getString(R.string.reset_time));
@@ -184,12 +204,38 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
 
         mAdView.loadAd(adRequest);
 
+
+	    // StartAd Create the adView
+	    this.sadView = new SADView(getActivity(), Utility.APPLICATION_ID);
+
+	    // Lookup your LinearLayout assuming it's been given
+	    // the attribute android:id="@+id/mainLayout"
+	    LinearLayout layout = (LinearLayout)rootView.findViewById(R.id.startAdLayout);
+
+	    // Add the adView to it
+	    layout.addView(this.sadView);
+
+	    //Load ad for currently active language in app
+	    if (Application.sDefSystemLanguage.toLowerCase().contains("ru")||
+			    Application.sDefSystemLanguage.toLowerCase().contains("uk")) {
+		    this.sadView.loadAd(SADView.LANGUAGE_RU);
+	    } else {
+		    this.sadView.loadAd(SADView.LANGUAGE_EN);
+	    }
+
         return rootView;
     }
 
 	@Override
 	public void onResume() {
 		super.onResume();
+
+		if (!Utility.timers.containsKey(mTitle)) {
+			setTimer(mTitle, advTime, mAdvice);
+			btnStart.setText(getString(R.string.start));
+			progressBar.setVisibility(View.GONE);
+		}
+
         // create filter for BroadcastReceiver
 		IntentFilter intFilt = new IntentFilter(Utility.BROADCAST_ACTION);
         // register BroadcastReceiver
@@ -209,10 +255,16 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
+
         getActivity().unbindService(sConn);
+
         if (Utility.id == 0) {
 			Intent intent = new Intent(getActivity(), TimerService.class);
 			getActivity().stopService(intent);
+		}
+
+		if (this.sadView != null) {
+			this.sadView.destroy();
 		}
 	}
 
@@ -274,17 +326,17 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
         }
 
         mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory("Action")
-                .setAction("Start timer")
-                .build());
+		        .setCategory("Action")
+		        .setAction("Start timer")
+		        .build());
     }
 
     private void onClickEdit() {
 
         mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory("Action")
-                .setAction("Edit advice")
-                .build());
+		        .setCategory("Action")
+		        .setAction("Edit advice")
+		        .build());
 
         if (Utility.twoPane) {
             // In two-pane mode, show the edit view in this activity by
@@ -322,8 +374,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
         // When tablets rotate, the currently selected button state needs to be saved.
 
             outState.putString(BUTTON_KEY, btnStart.getText().toString());
-
-        super.onSaveInstanceState(outState);
+	    super.onSaveInstanceState(outState);
     }
 
     @Override

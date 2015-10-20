@@ -1,8 +1,10 @@
 package com.vasiachess.cookadvisor;
 
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
@@ -145,7 +147,28 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         br = new BroadcastReceiver() {
 
             public void onReceive(Context context, Intent intent) {
+                String title = intent.getStringExtra(Utility.TITLE);
+                int timeUntilFinish = intent.getIntExtra(Utility.TIME_UNTIL_FINISH, 0);
+
 	            adviceAdapter.notifyDataSetChanged();
+
+                if (timeUntilFinish == 0) {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage(title + " - " + getActivity().getResources().getString(R.string.done));
+                    builder.setCancelable(false);
+                    builder.setPositiveButton(getActivity().getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog,
+                                                    int which) {
+                                    dialog.cancel();
+                                }
+                            });
+
+                    builder.show();
+                }
             }
         };
 
