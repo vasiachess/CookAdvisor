@@ -13,7 +13,6 @@ import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -165,20 +164,8 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
 	                    setTimer(mTitle, advTime, mAdvice);
                         btnStart.setText(getString(R.string.start));
 
-	                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-	                    builder.setMessage(mTitle + " - " + getActivity().getResources().getString(R.string.done));
-	                    builder.setCancelable(false);
-	                    builder.setPositiveButton(getActivity().getResources().getString(R.string.ok),
-			                    new DialogInterface.OnClickListener() {
-
-				                    @Override
-				                    public void onClick(DialogInterface dialog,
-				                                        int which) {
-					                    dialog.cancel();
-				                    }
-			                    });
-
-	                    builder.show();
+                        View customDialog = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.dialog_custom, null);
+                        Utility.showDoneDialog(getActivity(), customDialog, mTitle);
 
                     } else {
                         tvTimer.setText(Utility.getTime(timeUntilFinish));
@@ -189,21 +176,9 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
         };
 
 //        Don't use while testing
-//        AdRequest adRequest = new AdRequest.Builder().build();
-
-        final TelephonyManager tm =(TelephonyManager)getActivity().getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
-
-        String deviceid = tm.getDeviceId();
-	    Log.d("MyLog", "DeviceId: " + deviceid);
-
-        //    testing
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)  // All emulators
-                .addTestDevice("341BED1CDA3E2FC7")  // My test phone
-                .build();
+        AdRequest adRequest = new AdRequest.Builder().build();
 
         mAdView.loadAd(adRequest);
-
 
 	    // StartAd Create the adView
 	    this.sadView = new SADView(getActivity(), Utility.APPLICATION_ID);

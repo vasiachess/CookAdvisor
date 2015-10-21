@@ -140,7 +140,7 @@ public class TimerService extends Service {
 				sendBroadcast(intent);
 
 				Intent activity = new Intent(TimerService.this, DetailActivity.class).putExtra(Utility.TITLE, titles[tickId])
-								.putExtra(Utility.TIME, 0)
+								.putExtra(Utility.TIME, time)
 								.putExtra(Utility.ADVICE, advice);
 
 				int uniqueInt = (int) (System.currentTimeMillis() & 0xfffffff);

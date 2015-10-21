@@ -1,7 +1,16 @@
 package com.vasiachess.cookadvisor;
 
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.HashMap;
 
@@ -70,6 +79,30 @@ public class Utility {
 
     public static void removeCurrentTimer(String title) {
         timers.remove(title);
+    }
+
+    public static void showDoneDialog (Context ctx, View view, String title) {
+
+	    // set the custom dialog components - text, image
+	    TextView text = (TextView) view.findViewById(R.id.dialog_title);
+	    text.setText("  " + title + " - " + ctx.getResources().getString(R.string.done));
+	    ImageView image = (ImageView) view.findViewById(R.id.dialog_icon);
+	    image.setImageResource(getIconResourceForTitle(ctx, title));
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+	    builder.setView(view);
+        builder.setCancelable(false);
+        builder.setPositiveButton(ctx.getResources().getString(R.string.ok),
+		        new DialogInterface.OnClickListener() {
+
+			        @Override
+			        public void onClick(DialogInterface dialog,
+			                            int which) {
+				        dialog.cancel();
+			        }
+		        });
+
+        builder.show();
     }
 
 }

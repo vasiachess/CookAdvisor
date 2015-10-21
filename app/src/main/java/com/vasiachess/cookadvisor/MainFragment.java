@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -153,21 +154,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 	            adviceAdapter.notifyDataSetChanged();
 
                 if (timeUntilFinish == 0) {
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setMessage(title + " - " + getActivity().getResources().getString(R.string.done));
-                    builder.setCancelable(false);
-                    builder.setPositiveButton(getActivity().getResources().getString(R.string.ok),
-                            new DialogInterface.OnClickListener() {
-
-                                @Override
-                                public void onClick(DialogInterface dialog,
-                                                    int which) {
-                                    dialog.cancel();
-                                }
-                            });
-
-                    builder.show();
+	                View customDialog = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.dialog_custom, null);
+	                Utility.showDoneDialog(getActivity(), customDialog, title);
                 }
             }
         };
