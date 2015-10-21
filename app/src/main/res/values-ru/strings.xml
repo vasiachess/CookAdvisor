@@ -3,7 +3,6 @@
 	<string name="app_name">CookAdvisor</string>
 	<string name="Cancel">Отмена</string>
 	<string name="Delete">Удалить</string>
-	<string name="action_share"></string>
 	<string name="add">Добавить</string>
 	<string name="advice_label">Совет</string>
 	<string name="beans">фасоль</string>

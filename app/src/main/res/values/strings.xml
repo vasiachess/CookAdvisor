@@ -1,4 +1,8 @@
-<resources>
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources  xmlns:tools="http://schemas.android.com/tools"
+            tools:ignore="MissingTranslation"
+            tools:locale="en">
+
     <string name="app_name">CookAdvisor</string>
     <string name="action_settings" translatable="false">Settings</string>
     <string name="action_share" translatable="false">Share</string>
