@@ -153,7 +153,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
 	            adviceAdapter.notifyDataSetChanged();
 
-                if (timeUntilFinish == 0) {
+                if ((timeUntilFinish == 0)&&(!Utility.twoPane)) {
 	                View customDialog = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.dialog_custom, null);
 	                Utility.showDoneDialog(getActivity(), customDialog, title);
                 }

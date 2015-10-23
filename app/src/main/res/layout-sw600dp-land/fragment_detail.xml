@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="No selection"
+        android:text="@string/no_selection"
         android:id="@+id/textViewTitle"
         android:layout_alignTop="@+id/imageViewIcon"
         android:layout_toRightOf="@+id/imageViewIcon"
@@ -39,8 +39,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="00:00:00"
         android:id="@+id/textViewTimer"
-        android:inputType="time"
-        android:textSize="40dp"
+        android:textSize="40sp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/textViewTitle"
         android:layout_toRightOf="@+id/imageViewIcon"
@@ -122,23 +121,30 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_above="@+id/startAdLayout">
+        android:layout_above="@+id/adView">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/no_advices"
             style="@style/TextViewMain"
-            android:id="@+id/textViewAdvice" />
+            android:id="@+id/textViewAdvice"
+            android:layout_marginBottom="5dp"/>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/startAdLayout"/>
+
+        </LinearLayout>
 
     </ScrollView>
-
-	<LinearLayout
-		android:orientation="vertical"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:id="@+id/startAdLayout"
-		android:layout_above="@+id/adView"/>
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
@@ -146,7 +152,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        ads:adSize="BANNER"
+        ads:adSize="FULL_BANNER"
         ads:adUnitId="@string/banner_ad_unit_id"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
