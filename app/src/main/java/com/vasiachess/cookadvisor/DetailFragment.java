@@ -288,7 +288,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
 
     private void onClickStart() {
 
-        if (btnStart.getText() == getString(R.string.start)) {
+        if (btnStart.getText().toString().equals(getString(R.string.start))) {
 	        btnStart.setText(getString(R.string.reset_time));
 	        timerService.startTimer(mTitle, advTime, mAdvice);
         } else {
