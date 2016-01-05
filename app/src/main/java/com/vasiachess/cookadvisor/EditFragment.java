@@ -157,7 +157,7 @@ public class EditFragment extends Fragment implements View.OnClickListener {
                 intent.putExtra(Utility.ADVICE, etAdvice.getText().toString());
                 startActivity(intent);
             }
-        };
+        }
     }
 
 

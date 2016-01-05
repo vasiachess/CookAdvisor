@@ -34,6 +34,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.vasiachess.cookadvisor.MainActivity" />
         </activity>
+        <activity
+            android:name="com.vasiachess.cookadvisor.AlarmActivity"
+            android:label="Alarm"
+            android:theme="@style/AdviceTheme">
+        </activity>
 
         <provider
             android:name=".data.AdviceProvider"

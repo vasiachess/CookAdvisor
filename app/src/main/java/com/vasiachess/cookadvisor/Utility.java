@@ -24,6 +24,7 @@ public class Utility {
    public static int id = 0;
    public static final String TITLE = "title";
    public static final String TIME = "time";
+   public static final String TICK_ID = "tickId";
    public static final String TIME_UNTIL_FINISH = "time_until_finish";
    public static final String ADVICE = "advice";
    public static final String APPLICATION_ID = "56179c3027c1bf2200000000";

@@ -1,9 +1,11 @@
 package com.vasiachess.cookadvisor;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -26,10 +28,10 @@ import java.util.HashMap;
 public class TimerService extends Service {
 
     private final String LOG_TAG = "MyLog: " + TimerService.class.getSimpleName();
-    NotificationManager mNotifyManager;
-    NotificationCompat.Builder mBuilder;
+	NotificationManager mNotifyManager;
+	NotificationCompat.Builder mBuilder;
     protected CountDownTimer advCountDownTimer;
-    MediaPlayer mediaPlayer;
+
     private int currentId = 0;
     private int id = 0;
     private ArrayList<CountDownTimer> countDownTimers = new ArrayList<>();
@@ -85,6 +87,7 @@ public class TimerService extends Service {
 
 		final int maxTime = time * 1000;
 		final int tickId = id;
+
 		advCountDownTimer = new CountDownTimer(maxTime, 1000) {
 
 			@Override
@@ -129,35 +132,21 @@ public class TimerService extends Service {
 
 				Utility.setItemCurrentTime(titles[tickId], 0);
 
-				mediaPlayer = new  MediaPlayer();
-				mediaPlayer = MediaPlayer.create(getBaseContext(), R.raw.done);
-				mediaPlayer.start();
+				Intent alarmActivity = new Intent(TimerService.this, AlarmActivity.class).putExtra(Utility.TITLE, titles[tickId])
+						.putExtra(Utility.TICK_ID, tickId)
+						.putExtra(Utility.TIME, time)
+						.putExtra(Utility.ADVICE, advice);
+				PendingIntent pendingIntent =  PendingIntent.getActivity(TimerService.this, 0, alarmActivity, 0);
+
+				AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+				alarmManager.set(AlarmManager.RTC_WAKEUP,
+						System.currentTimeMillis(), pendingIntent);
 
 				Intent intent = new Intent(Utility.BROADCAST_ACTION).putExtra(Utility.TITLE, titles[tickId])
 						.putExtra(Utility.TIME_UNTIL_FINISH, 0)
 						.putExtra(Utility.TIME, time)
 						.putExtra(Utility.ADVICE, advice);
 				sendBroadcast(intent);
-
-				Intent activity = new Intent(TimerService.this, DetailActivity.class).putExtra(Utility.TITLE, titles[tickId])
-								.putExtra(Utility.TIME, time)
-								.putExtra(Utility.ADVICE, advice);
-
-				int uniqueInt = (int) (System.currentTimeMillis() & 0xfffffff);
-
-				PendingIntent contentIntent = PendingIntent.getActivity(TimerService.this, uniqueInt, activity, PendingIntent.FLAG_ONE_SHOT);
-
-				BitmapFactory.Options options = new BitmapFactory.Options();
-				options.inSampleSize = 2;
-				Bitmap icon = BitmapFactory.decodeResource(getResources(), Utility.getIconResourceForTitle(getApplicationContext(), titles[tickId]), options);
-
-				mBuilder.setContentText(titles[tickId] + " - " + getApplicationContext().getResources().getString(R.string.done))
-						.setContentIntent(contentIntent)
-						.setLargeIcon(icon)
-						.setSmallIcon(Utility.getIconResourceForTitle(getApplicationContext(), titles[tickId]))
-						.setVibrate(new long[]{100, 1500})
-						.setProgress(0, 0, false);
-				mNotifyManager.notify(titles[tickId], tickId, mBuilder.build());
 
 				Utility.id--;
 				Utility.removeCurrentTimer(titles[tickId]);

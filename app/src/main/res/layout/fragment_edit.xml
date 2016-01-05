@@ -34,7 +34,6 @@
         android:layout_marginLeft="10dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         style="@style/EditTextMain"
-        android:hint="@string/hint_title"
         android:layout_marginTop="10dp" />
 
     <LinearLayout
